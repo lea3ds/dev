@@ -13,8 +13,8 @@ namespace SaleWebApi.AuthorizationServer
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            context.Validated();
-            return base.ValidateClientAuthentication(context);
+           context.Validated();
+           return base.ValidateClientAuthentication(context);
         }
 
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)

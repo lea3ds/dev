@@ -9,7 +9,15 @@ import {PlayArrow as GoIcon} from '@material-ui/icons';
 
 
 class Component extends React.Component {
-
+    componentDidMount() {
+        // const data = {
+        //     grant_type: "password",
+        //     username: "Leandro",
+        //     password: "nadanada"
+        // };
+        const data = {grant_type: 'password', username: 'Leandro', password: 'nadanada'};
+        this.props.getToken(data);
+    }
     render() {
         let list = this.props.dataArrays.waytopayType;
 
