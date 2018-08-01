@@ -13,7 +13,7 @@ namespace SaleWebApi.Controllers
 {
     using Context = SaleEntities;
 
-    public class SynchronizatorController : ApiController
+    public class SynchronizatorController : BaseController
     {
         public class SyncStateResource
         {

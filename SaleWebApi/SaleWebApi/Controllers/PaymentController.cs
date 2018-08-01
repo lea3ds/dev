@@ -14,7 +14,7 @@ namespace SaleWebApi.Controllers
     using Context = SaleEntities;
 
 
-    public class PaymentController : ApiController
+    public class PaymentController : BaseController
     {
 
         private void UpdateVersion()

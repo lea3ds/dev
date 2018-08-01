@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IncomeCategoryController.cs" />
     <Compile Include="Controllers\WaytopayTypeController.cs" />
     <Compile Include="Controllers\WaytopayController.cs" />

@@ -13,8 +13,7 @@ namespace SaleWebApi.Controllers
 {
     using Context = SaleEntities;
 
-
-    public class IncomeCategoryController : ApiController
+    public class IncomeCategoryController : BaseController
     {
 
         private void UpdateVersion()
