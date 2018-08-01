@@ -6,6 +6,13 @@ using SaleWebApi.App_Start;
 using System;
 using System.Web.Http;
 
+/* NuGet
+Microsoft.Owin.Host.SystemWeb   -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0)
+Microsoft.AspNet.WebApi.Owin    -> Owin (>= 1.0.0) Microsoft.Owin (>= 2.0.2) Microsoft.AspNet.WebApi.Core (>= 5.2.6 && < 5.3.0) 
+Microsoft.Owin.Cors             -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0) Microsoft.AspNet.Cors (>= 5.0.0)
+Microsoft.Owin.Security.OAuth   -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0) Microsoft.Owin.Security (>= 4.0.0) Newtonsoft.Json (>= 9.0.1)  
+*/
+
 [assembly: OwinStartup(typeof(Startup))]
 namespace SaleWebApi.App_Start
 {

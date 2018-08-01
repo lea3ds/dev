@@ -25,15 +25,8 @@ namespace SaleWebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-
             // devuelve Json por defecto
-            config.Formatters.JsonFormatter.SupportedMediaTypes
-                .Add(new MediaTypeHeaderValue("text/html"));
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             // habilita CORS (NuGet -> Microsoft.AspNet.WebApi.Cors)
             var urlPermitidas = new EnableCorsAttribute("*", "*", "*"); //"www.midominio1.com, www.midominio2.es"
