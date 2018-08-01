@@ -7,6 +7,7 @@ using System;
 using System.Web.Http;
 
 /* NuGet
+Newtonsoft.Json
 Microsoft.Owin.Host.SystemWeb   -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0)
 Microsoft.AspNet.WebApi.Owin    -> Owin (>= 1.0.0) Microsoft.Owin (>= 2.0.2) Microsoft.AspNet.WebApi.Core (>= 5.2.6 && < 5.3.0) 
 Microsoft.Owin.Cors             -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0) Microsoft.AspNet.Cors (>= 5.0.0)
