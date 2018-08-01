@@ -134,7 +134,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AuthorizationServer\Provider.cs" />
+    <Compile Include="AuthorizationServer\RefreshTokenProvider.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IncomeCategoryController.cs" />
     <Compile Include="Controllers\WaytopayTypeController.cs" />
