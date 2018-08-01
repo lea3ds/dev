@@ -1,14 +1,7 @@
-
 SaleWebApi/.vs
-
 
 SaleWebApi/packages
 
-SaleWebApi/
-SaleWebApi/bin
-
-SaleWebApi/
-SaleWebApi/obj
 
 SaleApp/.idea
 SaleApp/.vscode
@@ -16,4 +9,3 @@ SaleApp/build
 SaleApp/node_modules
 SaleApp/.gitignore
 SaleApp/package-lock.json
-SaleApp/README.md
