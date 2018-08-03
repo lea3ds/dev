@@ -1,30 +1,36 @@
-import * as fetchHelper from "../_helpers/fetchHelper";
+//import * as fetchHelper from "../_helpers/fetchHelper";
+import * as conn from "../_helpers/connection";
 
-import { setLocalStorage, getLocalStorage, disp, post } from "../_helpers/dispatchers";
+//import { setLocalStorage, getLocalStorage, disp, post } from "../_helpers/dispatchers";
 
 
 export const startLoadArrays = () => (dispatch, getState) => {
-
     setInterval(() => {
-        var syncStateIsFetching = getState().dataArrays.syncStateIsFetching;
-        var timeToExpired = Math.trunc((getState().dataArrays.syncStateExpiredTime - new Date().getTime()) / 1000);
+        var auth = getState().authenticationStore;
+        var data = getState().dataArrays;
+
+        if (!!auth && auth.isAuthenticated!==true) return null;
+
+        var syncStateIsFetching = data.syncStateIsFetching;
+        var timeToExpired = Math.trunc((data.syncStateExpiredTime - new Date().getTime()) / 1000);
 
         if (timeToExpired < 0 && !syncStateIsFetching) {
             var reducer = 'DATA_SYNC';
             var url = 'Synchronizator/Sync';
-            var data = getState().dataArrays.syncState;;
+            var data = data.syncState;;
             dispatch({ type: reducer + '_REQUEST', payload: { url, data } });
-            fetchHelper.fetchPost(url, data)
+            conn.post(url, data)
                 .then(json => { dispatch({ type: reducer + '_SUCCESS', payload: json }); })
                 .catch(error => { dispatch({ type: reducer + '_FAILURE', payload: error }); })
         } else {
-            if (syncStateIsFetching) console.log("DATA_SYNC -> Slow connection: ", getState().dataArrays.syncStateExpiredInterval - timeToExpired);
+            if (syncStateIsFetching) console.log("DATA_SYNC -> Slow connection: ", data.syncStateExpiredInterval - timeToExpired);
             if (!syncStateIsFetching && timeToExpired < 0) console.log("DATA_SYNC -> Expired time: ", timeToExpired);
         }
     }, 1000);
+
 }
 
-
+/*
 export const post2 = () => (dispatch, getState) => {
     setInterval(() => {
         var nowTime = new Date().getTime();
@@ -67,3 +73,4 @@ export const startAutoSync = () => (dispatch, getState) => {
     }, 2000);
 
 }
+*/

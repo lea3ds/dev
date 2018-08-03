@@ -7,7 +7,7 @@ using System.Web.Http.Cors;
 
 namespace SaleWebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [EnableCors("*", "*", "*")]
     public class BaseController : ApiController
     {

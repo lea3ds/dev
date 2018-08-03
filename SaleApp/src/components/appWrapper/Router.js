@@ -10,8 +10,8 @@ export const Component = (props) => {
                 exact={x.exact === false?false:true}
                 path={x.path}
                 //component = {e =>React.createElement(x.component, { ...e })}
-                //render={e => <AuthChecker route={x}>{React.createElement(x.component, { ...e })}</AuthChecker>
-                render={e => React.createElement(x.component, { ...e, ...x.props })}
+                render={e => <AuthChecker route={x}>{React.createElement(x.component, { ...e })}</AuthChecker>}
+                //render={e => React.createElement(x.component, { ...e, ...x.props })}
             />
         )}
     </Switch>;

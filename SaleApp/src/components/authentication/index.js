@@ -1,17 +1,20 @@
-import React from 'react';
-import { connect } from "react-redux";
-import LogIn from "./login";
+import reducer from './_reducer';
+import login from './login';
+import logout from './logout';
+export { reducer }
 
+export const routesRoot = '/authentication';
+export const remoteUrl = 'authentication';
+export const remoteTokenUrl = 'token';
+export const storageKey = 'AUTHENTICATION';
 
-class Component extends React.Component {
-
-    render() {
-        //if ('esta autenticado!!!') { 'voy al home' }
-        return <LogIn />
-    }
+export const routes = {
+    login: { path: routesRoot + "/login", component: login, isPublic: true },
+    logout: { path: routesRoot + "/logout", component: logout, isPublic: true },
+    root: { path: routesRoot, component: login, isPublic: true },
 }
 
-// connect to store
-const mapDispatchToProps = { };
-const mapStateToProps = store => ({ data: store.data });
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+
+
+
+

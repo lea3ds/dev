@@ -7,6 +7,7 @@ import dataArrays from './dataArrays';
 import pageIncome from './pageIncome';
 
 import {reducer as paymentStore } from '../components/pages/Payment';
+import {reducer as authenticationStore } from '../components/authentication';
 
 export default combineReducers({
     appWraper,
@@ -14,4 +15,5 @@ export default combineReducers({
     dataArrays,
     pageIncome,
     paymentStore,
+    authenticationStore,
 });

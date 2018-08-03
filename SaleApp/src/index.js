@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from "react-dom"
 import { Provider } from 'react-redux'
 import App from './components/appWrapper';
+import BaseConfigure from './BaseConfigure';
 import { BrowserRouter } from "react-router-dom";
 
 // createStore --------------------------------------------
@@ -19,22 +20,18 @@ const logger = createLogger();
 const store = createStore(reducers, applyMiddleware(thunk, logger, ));
 
 
-
-// const TEST = () => {
-//     return <div>DEMO</div>
-// }
-
-
-
 // index render -------------------------------------------
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter>
-            <App />
-            {/* <TEST /> */}
-        </BrowserRouter>
+        <BaseConfigure>
+            <BrowserRouter>
+
+                    <App />
+
+            </BrowserRouter>
+</BaseConfigure>
     </Provider>,
     document.getElementById('root')
-)
+);
 
 
