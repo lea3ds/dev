@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { routes } from './';
 import * as actions from "./_actions";
 import * as mui from '@material-ui/core';
-import * as reg from "../Helper/regularExpresion";
+import * as reg from "../_helpers/regularExpresion";
 
 
 class Component extends React.Component {
@@ -61,7 +61,6 @@ class Component extends React.Component {
         return <div>
 
             <mui.TextField label="Id" value={current.id} style={{ width: "25%", marginTop: 15 }}
-                value={current.id}
             />
 
             <mui.TextField label="Name" fullWidth style={{ marginTop: 15 }}

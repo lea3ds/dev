@@ -2,27 +2,7 @@ import * as conn from "../../_helpers/connection";
 import { remoteUrl, remoteTokenUrl, storageKey } from './';
 import * as queryString from 'querystring'
 
-const _login = (data,history) => {
-    if (!!data) conn.storageSet(storageKey, data);
-    if (!!history) history.push('/');
-}
-
-const _logout = (history) => {
-    conn.storageSet(storageKey, null);
-    if (!!history) history.push('/');
-}
-
-
-export const verifyAuthentication = () => {
-    var localData =  conn.storageGet(storageKey);
-    if (!!localData && !!localData['access_token']) {
-        return true;
-    } else {
-        conn.storageSet(storageKey, null);
-        return false;
-    }
-}
-
+//public
 
 export const logout = (history) => (dispatch, getState) => {
     dispatch({type: 'AUTHENTICATION_LOGOUT'});
@@ -53,3 +33,19 @@ export const login = (data,history) => (dispatch, getState) => {
             _logout();
         })
 }
+
+
+
+
+//Private
+
+const _login = (data,history) => {
+    if (!!data) conn.storageSet(storageKey, data);
+    if (!!history) history.push('/');
+}
+
+const _logout = (history) => {
+    conn.storageSet(storageKey, null);
+    if (!!history) history.push('/');
+}
+

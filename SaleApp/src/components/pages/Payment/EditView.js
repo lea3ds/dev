@@ -5,7 +5,7 @@ import { routes } from './';
 import * as actions from "./_actions";
 import * as mui from '@material-ui/core';
 import * as miuIcons from '@material-ui/icons';
-import * as reg from "../Helper/regularExpresion";
+import * as reg from "../_helpers/regularExpresion";
 
 class Component extends React.Component {
 

@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { routes } from './';
 import * as actions from "./_actions";
 import * as mui from '@material-ui/core';
-import * as table from "../Helper/table";
+import * as table from "../_helpers/table";
 import {PlayArrow as GoIcon} from '@material-ui/icons';
-import * as converter from "../Helper/converters";
+import * as converter from "../_helpers/converters";
 
 class Component extends React.Component {
 
