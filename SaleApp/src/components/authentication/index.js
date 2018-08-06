@@ -5,6 +5,7 @@ import logout from './logout';
 
 export { reducer };
 export { actions };
+export * from './_actions';
 
 export const routesRoot = '/authentication';
 export const remoteUrl = 'authentication';

@@ -35,34 +35,28 @@ const menuLinks = [
 
 class Component extends React.Component {
 
-    constructor(props) {
-        super(props);
+    state = {
+        isReady: false,
+        links: menuLinks,
+        routes: [].concat(
+            Object.values(routesPaymentCategory),
+            Object.values(routesWaytopay),
+            Object.values(routesWaytopayType),
 
-        this.state = {
-            links: menuLinks,
-            routes: [].concat(
+            Object.values(routesPayment),
 
-                Object.values(routesPaymentCategory),
-                Object.values(routesWaytopay),
-                Object.values(routesWaytopayType),
-
-                Object.values(routesPayment),
-
-                Object.values(routesAuthentication),
-                Object.values(routes),
-            )
-        };
-    }
-    componentDidMount(){
-        //console.log("APP -> componentDidMount -> history : ", this.props.history)
-    }
+            Object.values(routesAuthentication),
+            Object.values(routes),
+        )
+    };
 
     render() {
         return (
             <section>
-                <Toolbar />
-                <Drawer links={this.state.links} />
-                <Router routes={this.state.routes} history = {this.props.history} authPath = {authPath} isAuthenticated={actions.verifyAuthentication()} />
+                <Toolbar/>
+                <Drawer links={this.state.links}/>
+                <Router routes={this.state.routes} history={this.props.history} authPath={authPath}
+                        isAuthenticated={actions.verifyAuthentication()}/>
             </section>
 
         );
