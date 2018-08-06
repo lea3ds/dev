@@ -24,7 +24,7 @@ export const configure = () => {
         }, (error) => {
             if (401 === error.response.status) {
                 storageSet(storageKey);
-                console.log("ERROR 401");
+                console.log('ERROR 401 - Clear ['+storageKey+']');
             }
             return Promise.reject(error);
         });
