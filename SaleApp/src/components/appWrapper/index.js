@@ -15,11 +15,7 @@ import { routes as routesPaymentCategory } from '../../components/pages/PaymentC
 import { routes as routesWaytopay } from '../../components/pages/Waytopay';
 import { routes as routesWaytopayType } from '../../components/pages/WaytopayType';
 
-
-import { actions,authPath  } from '../../components/authentication';
-
 const routes = {
-    //Authentication: { path: '/Authentication', component: Authentication, requireAuth: false },
     Main: { path: '/Main', component: Main },
     Root: { path: '/', component: Main },
 };
@@ -36,7 +32,6 @@ const menuLinks = [
 class Component extends React.Component {
 
     state = {
-        isReady: false,
         links: menuLinks,
         routes: [].concat(
             Object.values(routesPaymentCategory),
@@ -55,8 +50,12 @@ class Component extends React.Component {
             <section>
                 <Toolbar/>
                 <Drawer links={this.state.links}/>
-                <Router routes={this.state.routes} history={this.props.history} authPath={authPath}
-                        isAuthenticated={actions.verifyAuthentication()}/>
+                <Router
+                    routes={this.state.routes}
+                    history={this.props.history}
+                    authPath={routesAuthentication.root}
+                    isAuthenticated={this.props.authentication.isAuthenticated}
+                />
             </section>
 
         );
@@ -65,6 +64,6 @@ class Component extends React.Component {
 }
 
 const mapDispatchToProps = { };
-const mapStateToProps = store => ({ appWraper: store.appWraper, dataArrays: store.dataArrays,authentication: store.authenticationStore });
+const mapStateToProps = store => ({ appWraper: store.appWraper, authentication: store.authenticationStore });
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component));
 // el [withRouter] aca hace que renderice este componente cada vez que hay un cambio de URL
