@@ -1,5 +1,5 @@
 import * as conn from "../../_helpers/connection";
-import { remoteUrl, remoteTokenUrl, storageKey } from './';
+import { remoteTokenUrl, storageKey } from './';
 import * as queryString from 'querystring'
 
 //public

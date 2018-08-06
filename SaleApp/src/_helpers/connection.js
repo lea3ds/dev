@@ -13,7 +13,7 @@ export const configure = () => {
             return request;
         },
         (error) => {
-            console.log("axios.interceptors.request[error]",error);
+            console.log("axios.interceptors.request[error]", error);
             return Promise.reject(error);
         }
     );
@@ -24,8 +24,9 @@ export const configure = () => {
         }, (error) => {
             if (401 === error.response.status) {
                 storageSet(storageKey);
-                console.log('ERROR 401 - Clear ['+storageKey+']');
+                console.log('ERROR 401 - Clear [' + storageKey + ']');
             }
+            console.log("axios.interceptors.response[error]", error);
             return Promise.reject(error);
         });
 }
