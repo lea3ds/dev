@@ -28,5 +28,5 @@ class Component extends React.Component {
     }
 }
 const mapDispatchToProps = { autoLogin,sync };
-const mapStateToProps = store => ({ arrays: store.dataArrays, authentication: store.authenticationStore });
+const mapStateToProps = store => ({ authentication: store.authenticationStore });
 export default connect(mapStateToProps, mapDispatchToProps)(Component);

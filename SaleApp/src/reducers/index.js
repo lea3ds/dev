@@ -10,11 +10,8 @@ import {reducer as synchronizerStore } from '../components/synchronizer';
 import {reducer as paymentStore } from '../components/pages/Payment';
 
 export default combineReducers({
-
     authenticationStore,
     appWraper,
     dataArrays: synchronizerStore,
-
     paymentStore,
-
 });
