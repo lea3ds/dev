@@ -2,7 +2,6 @@ import axios from "axios";
 import { storageKey } from '../components/authentication';
 var urlBase = process.env.REACT_APP_SERVER_ADDR;
 
-
 export const configure = () => {
     axios.interceptors.request.use(
         (request) => {
@@ -11,10 +10,10 @@ export const configure = () => {
                 if (!!auth) request.headers['Authorization'] = auth['token_type'] + ' ' + auth['access_token'];
             }
             if (!request.headers['Content-Type']) request.headers['Content-Type'] = 'application/json';
-            console.log("--interceptors--", request);
             return request;
         },
         (error) => {
+            console.log("axios.interceptors.request[error]",error);
             return Promise.reject(error);
         }
     );
@@ -23,6 +22,10 @@ export const configure = () => {
         (response) => {
             return response;
         }, (error) => {
+            if (401 === error.response.status) {
+                storageSet(storageKey);
+                console.log("ERROR 401");
+            }
             return Promise.reject(error);
         });
 }
@@ -57,6 +60,6 @@ export function storageGet(key) {
 }
 
 export function storageSet(key, data) {
-    if (!!data) data = JSON.stringify(data);
+    if (!!data) data = JSON.stringify(data); else data = null;
     localStorage.setItem(key, data);
 }

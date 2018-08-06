@@ -16,6 +16,8 @@ import { routes as routesWaytopay } from '../../components/pages/Waytopay';
 import { routes as routesWaytopayType } from '../../components/pages/WaytopayType';
 
 
+import { actions,authPath  } from '../../components/authentication';
+
 const routes = {
     //Authentication: { path: '/Authentication', component: Authentication, requireAuth: false },
     Main: { path: '/Main', component: Main },
@@ -51,14 +53,16 @@ class Component extends React.Component {
             )
         };
     }
+    componentDidMount(){
+        //console.log("APP -> componentDidMount -> history : ", this.props.history)
+    }
 
     render() {
-
         return (
             <section>
                 <Toolbar />
                 <Drawer links={this.state.links} />
-                <Router routes={this.state.routes} />
+                <Router routes={this.state.routes} history = {this.props.history} authPath = {authPath} isAuthenticated={actions.verifyAuthentication()} />
             </section>
 
         );

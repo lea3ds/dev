@@ -1,17 +1,12 @@
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-
 
 const Component = (props) => {
 
-    if (props.route.isPublic !== true && props.authentication.isAuthenticated !== true) {
-        props.history.push('/Authentication');
+    if (props.route.isPublic !== true && props.isAuthenticated !== true) {
+        props.history.push(props.authPath);
         return null;
     }
+
     return props.children;
 }
 
-const mapDispatchToProps = {};
-const mapStateToProps = store => ({ authentication: store.authenticationStore });
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Component));
-
+export default Component;

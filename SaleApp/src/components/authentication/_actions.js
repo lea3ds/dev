@@ -12,6 +12,18 @@ const _logout = (history) => {
     if (!!history) history.push('/');
 }
 
+
+export const verifyAuthentication = () => {
+    var localData =  conn.storageGet(storageKey);
+    if (!!localData && !!localData['access_token']) {
+        return true;
+    } else {
+        conn.storageSet(storageKey, null);
+        return false;
+    }
+}
+
+
 export const logout = (history) => (dispatch, getState) => {
     dispatch({type: 'AUTHENTICATION_LOGOUT'});
     _logout(history);

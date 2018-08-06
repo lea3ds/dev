@@ -17,7 +17,7 @@ export const startLoadArrays = () => (dispatch, getState) => {
         if (timeToExpired < 0 && !syncStateIsFetching) {
             var reducer = 'DATA_SYNC';
             var url = 'Synchronizator/Sync';
-            var data = data.syncState;;
+            var data = data.syncState;
             dispatch({ type: reducer + '_REQUEST', payload: { url, data } });
             conn.post(url, data)
                 .then(json => { dispatch({ type: reducer + '_SUCCESS', payload: json }); })

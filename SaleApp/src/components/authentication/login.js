@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from "react-redux";
-import {autoLogin,login} from "./_actions";
+import {autoLogin, login} from "./_actions";
+import {withRouter} from "react-router-dom";
 
 class Component extends React.Component {
     componentDidMount() {
+        console.log(this)
         this.props.autoLogin(this.props.history);
     }
 
@@ -18,7 +20,6 @@ class Component extends React.Component {
     }
 }
 
-
-const mapDispatchToProps = {autoLogin,login};
+const mapDispatchToProps = {autoLogin ,login};
 const mapStateToProps = store => ({ authentication: store.authenticationStore });
-export default connect(mapStateToProps, mapDispatchToProps)(Component);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component));
