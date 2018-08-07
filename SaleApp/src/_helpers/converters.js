@@ -1,4 +1,4 @@
-
+/*
 export function intToDecimal(value) {
     if (!!!value) value = '000';
     value = value.toString()
@@ -52,3 +52,4 @@ export function dateToString(value,format) {
 
     return strDate;
 }
+*/

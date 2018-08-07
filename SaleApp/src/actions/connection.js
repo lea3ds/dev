@@ -1,23 +1,32 @@
 import axios from "axios";
 var urlBase = process.env.REACT_APP_SERVER_ADDR;
 
-export const configure = () => (dispatch, getState) => {
+
+export const configure = () =>  (dispatch, getState) => {
 
     axios.interceptors.request.use(
         (request) => {
-            if (!request.headers['Authorization']) {
-                let {token_type, access_token} = getState().authentication;
-                if (!!auth) request.headers['Authorization'] = token_type + ' ' + access_token;
-            }
-            if (!request.headers['Content-Type']) request.headers['Content-Type'] = 'application/json';
+
+            var {isAuthenticated, token} = getState().authenticationStore;
+            if (!!!request.headers['Authorization'] && isAuthenticated === true)
+                request.headers['Authorization'] = token.token_type + ' ' + token.access_token;
+
+            if (!!!request.headers['Content-Type'])
+                request.headers['Content-Type'] = 'application/json';
+
             return request;
         },
-        (error) => Promise.reject(requestErrorHandles(error)));
+        (error) => {
+            dispatch({type: 'CONNECTION_REQUEST_ERROR', payload: error});
+            return Promise.reject(error);
+        });;
 
     axios.interceptors.response.use(
         (response) => response,
-        (error) => Promise.reject(responseErrorHandles(error)));
-
+        (error) => {
+            dispatch({type: 'CONNECTION_RESPONSE_ERROR', payload: error});
+            return Promise.reject(error);
+        });
 }
 
 export const get=(url, key) => (dispatch, getState) => {
@@ -35,6 +44,7 @@ export const post=(url,data,config) => (dispatch, getState) => {
         .catch(error => Promise.reject(error))
 }
 
+
 export const put=(url,key,data,config) => (dispatch, getState) => {
     key = !!key ? '/' + key : '';
     url = urlBase + url + key;
@@ -43,7 +53,7 @@ export const put=(url,key,data,config) => (dispatch, getState) => {
         .catch(error => Promise.reject(error))
 }
 
-export const storageGet=(key)=>{
+export const storageGet=(key) => {
     var data = localStorage.getItem(key);
     if (!!!data) return null;
     return JSON.parse(data);
@@ -52,16 +62,4 @@ export const storageGet=(key)=>{
 export const storageSet=(key, data)=>{
     if (!!data) data = JSON.stringify(data); else data = null;
     localStorage.setItem(key, data);
-}
-
-const responseErrorHandles=(error)=>{
-    if (401 === error.response.status) {
-        console.log('ERROR 401');
-    }
-}
-
-const requestErrorHandles=(error)=>{
-    if (401 === error.response.status) {
-        console.log('ERROR 401');
-    }
 }

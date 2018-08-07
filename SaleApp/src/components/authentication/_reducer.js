@@ -1,34 +1,57 @@
-const storageData = () => {
-    let ret = {token_type: '', access_token: ''};
-    let data = localStorage.getItem('AUTHENTICATION');
-    if (!!!data) return ret;
-    data = JSON.parse(data);
-    ret.token_type = data.token_type;
-    ret.access_token = data.access_token;
-    return ret;
-}
+import {storageSet} from "../../actions/connection";
 
 const initialState = {
-    ...storageData(), // {token_type: '', access_token: ''}
     isAuthenticated: false,
     isAuthenticating: false,
+    token: null,
 };
 
-const reducer = (state = initialState, action) => {
+const initialStorage = () => {
+    try {
+        let data = localStorage.getItem('AUTHENTICATION');
+        data = JSON.parse(data);
+        data.isAuthenticated = (!!data.token.token_type && !!data.token.token_type); // validar EXPIRACION
+        console.log("STORAGE LOGIN OK ->",data);
+        return data;
+    }
+    catch(error) {
+        console.log("STORAGE LOGIN ERROR");
+        return {};
+    }
+}
 
+const updateStorage=(newState) =>{
+    storageSet('AUTHENTICATION', newState);
+}
+
+const reducer = (state = {...initialState,...initialStorage() }, action) => {
+    let newState = {...state};
     switch (action.type) {
-        case 'AUTHENTICATION_LOGOUT' :
-            return {...state, isAuthenticated: false, isAuthenticating: false};
+
         case 'AUTHENTICATION_LOGIN' :
-            return {...state, isAuthenticated: false, isAuthenticating: true};
+            updateStorage(newState); return newState;
+
         case 'AUTHENTICATION_LOGIN_SUCCESS' :
-            return {...state, isAuthenticated: true, isAuthenticating: false};
+            newState = {...state, isAuthenticated: true, isAuthenticating: false, token: action.payload};
+            updateStorage(newState); return newState;
+
         case 'AUTHENTICATION_LOGIN_FAILURE' :
-            return {...state, isAuthenticated: false, isAuthenticating: false};
+            newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
+            updateStorage(newState); return newState;
+
+        case 'AUTHENTICATION_LOGOUT' :
+            newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
+            updateStorage(newState); return newState;
+
+        case 'CONNECTION_RESPONSE_ERROR' :
+            if (!!action.payload.response && action.payload.response.status === 401)
+                newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
+            updateStorage(newState); return newState;
 
         default:
-            return state
+            return state;
     }
+
 }
 
 export default reducer;

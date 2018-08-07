@@ -1,4 +1,4 @@
-import * as conn from "../../_helpers/connection";
+import * as conn from "../../actions/connection";
 import { remoteUrl } from './';
 
 export const sync = () => (dispatch, getState) => {
@@ -11,9 +11,9 @@ export const sync = () => (dispatch, getState) => {
         var url = 'Synchronizator/Sync';
         var data = arrays.syncState;
         dispatch({ type: reducer + '_REQUEST', payload: { url, data } });
-        conn.post(url, data)
-            .then(json => { dispatch({ type: reducer + '_SUCCESS', payload: json }); })
-            .catch(error => { dispatch({ type: reducer + '_FAILURE', payload: error }); })
+        dispatch(conn.post(url, data))
+            .then(json => {dispatch({ type: reducer + '_SUCCESS', payload: json }); })
+            .catch(error => {dispatch({ type: reducer + '_FAILURE', payload: error }); })
     } else {
         if (syncStateIsFetching) console.log("DATA_SYNC -> Slow connection: ", arrays.syncStateExpiredInterval - timeToExpired);
         if (!syncStateIsFetching && timeToExpired < 0) console.log("DATA_SYNC -> Expired time: ", timeToExpired);
