@@ -11,11 +11,9 @@ const initialStorage = () => {
         let data = localStorage.getItem('AUTHENTICATION');
         data = JSON.parse(data);
         data.isAuthenticated = (!!data.token.token_type && !!data.token.token_type); // validar EXPIRACION
-        console.log("STORAGE LOGIN OK ->",data);
         return data;
     }
     catch(error) {
-        console.log("STORAGE LOGIN ERROR");
         return {};
     }
 }

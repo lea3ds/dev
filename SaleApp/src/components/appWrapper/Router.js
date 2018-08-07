@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import AuthenticationChecker from "./authenticationChecker"
+import AuthenticationChecker from "../authentication/routeChecker"
 
 export const Component = (props) => {
     return <Switch>
@@ -12,9 +12,9 @@ export const Component = (props) => {
                 //component = {e =>React.createElement(x.component, { ...e })}
                 render={e =>
                     <AuthenticationChecker
-                        route={x}
+                        isPublic = {x.isPublic}
                         history={props.history}
-                        authPath={props.authPath}
+                        authPath={props.authPath.path}
                         isAuthenticated={props.isAuthenticated}>
                         {React.createElement(x.component, {...e})}
                     </AuthenticationChecker>
