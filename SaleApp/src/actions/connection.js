@@ -4,7 +4,6 @@ var urlBase = process.env.REACT_APP_SERVER_ADDR;
 
 
 export const configure = () =>  (dispatch, getState) => {
-
     axios.interceptors.request.use(
         (request) => {
             if (request.url.includes('token')) {
@@ -58,16 +57,15 @@ export const connectionResponseErrorHandles = (error) => (dispatch, getState) =>
 }
 
 export const token=(data)=>(dispatch, getState) => {
-    var grantType = (data.grant_type === 'refresh_token')?'REFRESH':'GET';
-
-    dispatch({type: 'AUTHENTICATION_TOKEN_'+grantType, payload: data.grant_type});
+    var grantType = '';(data.grant_type === 'refresh_token')?'_REFRESH':'_GET';
+    dispatch({type: 'AUTHENTICATION_TOKEN'+grantType, payload: data.grant_type});
     return axios.post(urlBase + 'token', queryString.stringify(data))
         .then(response => {
-            dispatch({type: 'AUTHENTICATION_TOKEN_'+grantType+'_SUCCESS', payload: response.data});
+            dispatch({type: 'AUTHENTICATION_TOKEN'+grantType+'_SUCCESS', payload: response.data});
             return response.data;
         })
         .catch(error => {
-            dispatch({type: 'AUTHENTICATION_TOKEN_'+grantType+'_FAILURE', payload: error});
+            dispatch({type: 'AUTHENTICATION_TOKEN'+grantType+'_FAILURE', payload: error});
             return Promise.reject(error);
         })
 }
