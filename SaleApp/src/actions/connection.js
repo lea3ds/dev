@@ -52,6 +52,11 @@ export const connectionResponseErrorHandles = (error) => (dispatch, getState) =>
             .then(() => error.config)
             .catch(() => Promise.reject(error))
     }
+    if (error.response.status === 400 && error.config.url.includes('token')) {
+        dispatch({type: 'AUTHENTICATION_LOGOUT', payload: error});
+        return Promise.reject(error);
+    }
+
     dispatch({type: 'CONNECTION_RESPONSE_ERROR', payload: error});
     return Promise.reject(error);
 }

@@ -26,26 +26,25 @@ const reducer = (state = {...initialState,...initialStorage() }, action) => {
     let newState = {...state};
     switch (action.type) {
 
+        case 'AUTHENTICATION_LOGOUT' :
+            newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
+            updateStorage(newState);
+            return newState;
+
+
         case 'AUTHENTICATION_TOKEN' :
-            updateStorage(newState); return newState;
+            updateStorage(newState);
+            return newState;
 
         case 'AUTHENTICATION_TOKEN_SUCCESS' :
             newState = {...state, isAuthenticated: true, isAuthenticating: false, token: action.payload};
-            updateStorage(newState); return newState;
+            updateStorage(newState);
+            return newState;
 
         case 'AUTHENTICATION_TOKEN_FAILURE' :
             newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
-            updateStorage(newState); return newState;
-
-
-        case 'AUTHENTICATION_LOGOUT' :
-            newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
-            updateStorage(newState); return newState;
-
-        case 'CONNECTION_RESPONSE_ERROR' :
-            if (!!action.payload.response && action.payload.response.status === 401)
-                newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
-            updateStorage(newState); return newState;
+            updateStorage(newState);
+            return newState;
 
         default:
             return state;

@@ -16,8 +16,8 @@ import { routes as routesWaytopay } from '../../components/pages/Waytopay';
 import { routes as routesWaytopayType } from '../../components/pages/WaytopayType';
 
 const routes = {
-    Main: { path: '/Main', component: Main },
-    Root: { path: '/', component: Main },
+    Main: { path: '/Main', component: Main, isPublic: true },
+    Root: { path: '/', component: Main, isPublic: true },
 };
 
 const menuLinks = [

@@ -29,8 +29,9 @@ namespace SaleWebApi.AuthorizationServer
         public override Task CreateAsync(AuthenticationTokenCreateContext context)
         {
             var guid = "refresh123";// Guid.NewGuid().ToString();
+            context.Ticket.Properties.IssuedUtc = DateTime.UtcNow;
+            context.Ticket.Properties.ExpiresUtc = DateTime.UtcNow.Add(_refreshTokenLifetime);
             _refreshTokens.TryAdd(guid, context.Ticket);
-
             context.SetToken(guid);
             return Task.FromResult<object>(null);
         }

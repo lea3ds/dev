@@ -44,9 +44,9 @@ namespace SaleWebApi.App_Start
             var serverOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/api/token"), // http://localhost:51931/api/token //grant_type:password username:Leandro password:nadanada
+                TokenEndpointPath = new PathString("/api/token"), // http://localhost:51931/api/token //grant_type:password&username:admin password:123456
                 AccessTokenExpireTimeSpan = accessTokenLifetime,
-                Provider = new AuthorizationServer.TokenProvider(), // http://localhost:51931/api/token //grant_type:refresh_token token:lalalala
+                Provider = new AuthorizationServer.TokenProvider(), // http://localhost:51931/api/token //grant_type:refresh_token&refresh_token:elRefreshToken
                 RefreshTokenProvider = new AuthorizationServer.RefreshTokenProvider(refreshTokenLifetime),
             };
             appBuilder.UseOAuthAuthorizationServer(serverOptions);

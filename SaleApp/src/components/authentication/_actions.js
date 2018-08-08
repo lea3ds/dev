@@ -1,6 +1,5 @@
 import * as conn from "../../actions/connection";
 import { remoteTokenUrl, storageKey } from './';
-import * as queryString from 'querystring'
 
 //public
 const goHome=(history)=>{
@@ -26,7 +25,6 @@ export const autoLogin = (history) => (dispatch, getState) => {
 export const login = (data,history) => (dispatch, getState) => {
     return dispatch(conn.token(data))
         .then(json => {
-            console.log("LOGIN OK ", json)
             goHome(history);
         })
         .catch(error => {
