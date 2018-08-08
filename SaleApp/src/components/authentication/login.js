@@ -11,7 +11,7 @@ class Component extends React.Component {
     render() {
         return <div>
             <button onClick={e => {
-                const data = {grant_type: 'password', username: 'Leandro', password: 'nadanada'};
+                const data = {grant_type: 'password', username: 'admin', password: '123456'};
                 this.props.login(data,this.props.history);
             }}>Login
             </button>

@@ -39,14 +39,15 @@ namespace SaleWebApi.App_Start
         private void ConfigureOAuth(IAppBuilder appBuilder)
         {
             var accessTokenLifetime = TimeSpan.FromMinutes(10);
-            //var refreshTokenLifetime = TimeSpan.FromDays(1);
+            var refreshTokenLifetime = TimeSpan.FromDays(10);
+
             var serverOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/api/token"), // http://localhost:51931/api/token //grant_type:password username:Leandro password:nadanada
                 AccessTokenExpireTimeSpan = accessTokenLifetime,
-                Provider = new AuthorizationServer.Provider(),
-                //RefreshTokenProvider = new CustomRefreshTokenProvider(refreshTokenLifetime),
+                Provider = new AuthorizationServer.TokenProvider(), // http://localhost:51931/api/token //grant_type:refresh_token token:lalalala
+                RefreshTokenProvider = new AuthorizationServer.RefreshTokenProvider(refreshTokenLifetime),
             };
             appBuilder.UseOAuthAuthorizationServer(serverOptions);
             appBuilder.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());

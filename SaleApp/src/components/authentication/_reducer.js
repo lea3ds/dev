@@ -26,6 +26,30 @@ const reducer = (state = {...initialState,...initialStorage() }, action) => {
     let newState = {...state};
     switch (action.type) {
 
+        case 'AUTHENTICATION_TOKEN_GET' :
+            updateStorage(newState); return newState;
+
+        case 'AUTHENTICATION_TOKEN_GET_SUCCESS' :
+            newState = {...state, isAuthenticated: true, isAuthenticating: false, token: action.payload};
+            updateStorage(newState); return newState;
+
+        case 'AUTHENTICATION_TOKEN_GET_FAILURE' :
+            newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
+            updateStorage(newState); return newState;
+
+
+        case 'AUTHENTICATION_TOKEN_REFRESH' :
+            updateStorage(newState); return newState;
+
+        case 'AUTHENTICATION_TOKEN_REFRESH_SUCCESS' :
+            newState = {...state, isAuthenticated: true, isAuthenticating: false, token: action.payload};
+            updateStorage(newState); return newState;
+
+        case 'AUTHENTICATION_TOKEN_REFRESH_FAILURE' :
+            newState =  {...state, isAuthenticated: false, isAuthenticating: false, token: null};
+            updateStorage(newState); return newState;
+
+
         case 'AUTHENTICATION_LOGIN' :
             updateStorage(newState); return newState;
 

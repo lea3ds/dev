@@ -24,13 +24,12 @@ export const autoLogin = (history) => (dispatch, getState) => {
 }
 
 export const login = (data,history) => (dispatch, getState) => {
-    dispatch({type: 'AUTHENTICATION_LOGIN', payload: data.grant_type});
-    return dispatch(conn.post(remoteTokenUrl, queryString.stringify(data), { headers: {'Content-Type': 'application/x-www-form-urlencoded'} }))
+    return dispatch(conn.token(data))
         .then(json => {
-            dispatch({type: 'AUTHENTICATION_LOGIN_SUCCESS', payload: json});
+            console.log("LOGIN OK ", json)
             goHome(history);
         })
         .catch(error => {
-            dispatch({type: 'AUTHENTICATION_LOGIN_FAILURE', payload: error});
+            console.log("LOGIN ERROR ", error)
         })
 }
