@@ -70,7 +70,6 @@ export const token=(data)=>(dispatch, getState) => {
         })
 }
 
-
 export const get=(url, key) => (dispatch, getState) => {
     key = !!key ? '/' + key : '';
     url = urlBase + url + key;
