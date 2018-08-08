@@ -3,7 +3,9 @@ import { remoteTokenUrl, storageKey } from './';
 
 //public
 const goHome=(history)=>{
-    if (!!history) history.push('/');
+    if (!!history)
+        //history.goBack();
+        history.push('/');
 }
 
 export const logout = (history) => (dispatch, getState) => {
@@ -23,6 +25,7 @@ export const autoLogin = (history) => (dispatch, getState) => {
 }
 
 export const login = (data,history) => (dispatch, getState) => {
+    console.log(history)
     return dispatch(conn.token(data))
         .then(json => {
             goHome(history);
