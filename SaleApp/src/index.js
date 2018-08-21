@@ -3,9 +3,12 @@
 import React from 'react'
 import ReactDOM from "react-dom"
 import { Provider } from 'react-redux'
-import App from './components/appWrapper';
-import BaseConfigure from './BaseConfigure';
 import { BrowserRouter } from "react-router-dom";
+
+import './assets/css/style.css';
+
+import App from './components/app';
+import BaseConfigure from './components/app/BaseConfigure';
 
 // createStore --------------------------------------------
 import { createStore, applyMiddleware } from 'redux'

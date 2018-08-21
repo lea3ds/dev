@@ -83,13 +83,17 @@ export const get=(url, key) => (dispatch, getState) => {
         .catch(error => Promise.reject(error))
 }
 
-export const post=(url,data,config) => (dispatch, getState) => {
-    url = urlBase + url;
-    return axios.post(url, data, config)
-        .then(response => Promise.resolve(response.data))
-        .catch(error => Promise.reject(error))
-}
+// export const post=(url,data,config) => (dispatch, getState) => {
+//     url = urlBase + url;
+//     return axios.post(url, data, config)
+//         .then(response => Promise.resolve(response.data))
+//         .catch(error => Promise.reject(error))
+// }
 
+export const post=(url,data,config)=> {
+    url = urlBase + url;
+    return axios.post(url, data, config);
+}
 
 export const put=(url,key,data,config) => (dispatch, getState) => {
     key = !!key ? '/' + key : '';
@@ -108,4 +112,18 @@ export const storageGet=(key) => {
 export const storageSet=(key, data)=>{
     if (!!data) data = JSON.stringify(data); else data = null;
     localStorage.setItem(key, data);
+}
+
+
+
+
+
+
+
+export const account_login=(data)=>{
+    return axios.post(urlBase + 'token', queryString.stringify(data))
+}
+
+export const account_password=(data)=>{
+    return axios.post(urlBase + 'account' + '/' + 'password', data)
 }
