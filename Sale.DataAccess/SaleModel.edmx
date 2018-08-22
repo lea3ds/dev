@@ -1,0 +1,770 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SaleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccountPassword">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="Hash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Salt" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Iterations" Type="int" Nullable="false" />
+          <Property Name="Attempts" Type="int" Nullable="false" />
+          <Property Name="AttemptTimeStamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AccountUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Mail" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Disabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountValidationRecovery">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="InsertionTimeStamp" Type="datetime" Nullable="false" />
+          <Property Name="ExpirationTime" Type="datetime" Nullable="false" />
+          <Property Name="ValidationTimeStamp" Type="datetime" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountValidationSignin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="InsertionTimeStamp" Type="datetime" Nullable="false" />
+          <Property Name="ExpirationTime" Type="datetime" Nullable="false" />
+          <Property Name="ValidationTimeStamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Income">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" />
+          <Property Name="detail" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="categoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="IncomeCategory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="disabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IncomePending">
+          <Key>
+            <PropertyRef Name="incomeId" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="incomeId" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="date" Type="datetime" />
+          <Property Name="waytopayId" Type="int" />
+        </EntityType>
+        <EntityType Name="OperationType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" />
+          <Property Name="detail" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="categoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="PaymentCategory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="disabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentPending">
+          <Key>
+            <PropertyRef Name="paymentId" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="paymentId" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="date" Type="datetime" />
+          <Property Name="waytopayId" Type="int" />
+        </EntityType>
+        <EntityType Name="VersionTable">
+          <Key>
+            <PropertyRef Name="key" />
+          </Key>
+          <Property Name="key" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="version" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Waytopay">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="disabled" Type="bit" Nullable="false" />
+          <Property Name="typeId" Type="int" />
+        </EntityType>
+        <EntityType Name="WaytopayType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="disabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Income_IncomeCategory">
+          <End Role="IncomeCategory" Type="Self.IncomeCategory" Multiplicity="0..1" />
+          <End Role="Income" Type="Self.Income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomeCategory">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Income">
+              <PropertyRef Name="categoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IncomePending_Income">
+          <End Role="Income" Type="Self.Income" Multiplicity="1" />
+          <End Role="IncomePending" Type="Self.IncomePending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Income">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="IncomePending">
+              <PropertyRef Name="incomeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IncomePending_Waytopay">
+          <End Role="Waytopay" Type="Self.Waytopay" Multiplicity="0..1" />
+          <End Role="IncomePending" Type="Self.IncomePending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Waytopay">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="IncomePending">
+              <PropertyRef Name="waytopayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Password_User">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="1" />
+          <End Role="AccountPassword" Type="Self.AccountPassword" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_PaymentCategory">
+          <End Role="PaymentCategory" Type="Self.PaymentCategory" Multiplicity="0..1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentCategory">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="categoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentPending_Payment">
+          <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
+          <End Role="PaymentPending" Type="Self.PaymentPending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payment">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentPending">
+              <PropertyRef Name="paymentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentPending_Waytopay">
+          <End Role="Waytopay" Type="Self.Waytopay" Multiplicity="0..1" />
+          <End Role="PaymentPending" Type="Self.PaymentPending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Waytopay">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentPending">
+              <PropertyRef Name="waytopayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationRecovery_User">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="1" />
+          <End Role="AccountValidationRecovery" Type="Self.AccountValidationRecovery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountValidationRecovery">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Waytopay_WaytopayType">
+          <End Role="WaytopayType" Type="Self.WaytopayType" Multiplicity="0..1" />
+          <End Role="Waytopay" Type="Self.Waytopay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WaytopayType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Waytopay">
+              <PropertyRef Name="typeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SaleModelStoreContainer">
+          <EntitySet Name="AccountPassword" EntityType="Self.AccountPassword" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountUser" EntityType="Self.AccountUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountValidationRecovery" EntityType="Self.AccountValidationRecovery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountValidationSignin" EntityType="Self.AccountValidationSignin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Income" EntityType="Self.Income" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomeCategory" EntityType="Self.IncomeCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomePending" EntityType="Self.IncomePending" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OperationType" EntityType="Self.OperationType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentCategory" EntityType="Self.PaymentCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentPending" EntityType="Self.PaymentPending" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VersionTable" EntityType="Self.VersionTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Waytopay" EntityType="Self.Waytopay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WaytopayType" EntityType="Self.WaytopayType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Income_IncomeCategory" Association="Self.FK_Income_IncomeCategory">
+            <End Role="IncomeCategory" EntitySet="IncomeCategory" />
+            <End Role="Income" EntitySet="Income" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IncomePending_Income" Association="Self.FK_IncomePending_Income">
+            <End Role="Income" EntitySet="Income" />
+            <End Role="IncomePending" EntitySet="IncomePending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IncomePending_Waytopay" Association="Self.FK_IncomePending_Waytopay">
+            <End Role="Waytopay" EntitySet="Waytopay" />
+            <End Role="IncomePending" EntitySet="IncomePending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Password_User" Association="Self.FK_Password_User">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="AccountPassword" EntitySet="AccountPassword" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_PaymentCategory" Association="Self.FK_Payment_PaymentCategory">
+            <End Role="PaymentCategory" EntitySet="PaymentCategory" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentPending_Payment" Association="Self.FK_PaymentPending_Payment">
+            <End Role="Payment" EntitySet="Payment" />
+            <End Role="PaymentPending" EntitySet="PaymentPending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentPending_Waytopay" Association="Self.FK_PaymentPending_Waytopay">
+            <End Role="Waytopay" EntitySet="Waytopay" />
+            <End Role="PaymentPending" EntitySet="PaymentPending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationRecovery_User" Association="Self.FK_ValidationRecovery_User">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="AccountValidationRecovery" EntitySet="AccountValidationRecovery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Waytopay_WaytopayType" Association="Self.FK_Waytopay_WaytopayType">
+            <End Role="WaytopayType" EntitySet="WaytopayType" />
+            <End Role="Waytopay" EntitySet="Waytopay" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SaleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccountPassword">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="Hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Salt" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Iterations" Type="Int32" Nullable="false" />
+          <Property Name="Attempts" Type="Int32" Nullable="false" />
+          <Property Name="AttemptTimeStamp" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AccountUser" Relationship="Self.FK_Password_User" FromRole="AccountPassword" ToRole="AccountUser" />
+        </EntityType>
+        <EntityType Name="AccountUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Mail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Disabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountPassword" Relationship="Self.FK_Password_User" FromRole="AccountUser" ToRole="AccountPassword" />
+          <NavigationProperty Name="AccountValidationRecovery" Relationship="Self.FK_ValidationRecovery_User" FromRole="AccountUser" ToRole="AccountValidationRecovery" />
+        </EntityType>
+        <EntityType Name="AccountValidationRecovery">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="InsertionTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpirationTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValidationTimeStamp" Type="DateTime" Precision="3" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="AccountUser" Relationship="Self.FK_ValidationRecovery_User" FromRole="AccountValidationRecovery" ToRole="AccountUser" />
+        </EntityType>
+        <EntityType Name="AccountValidationSignin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="InsertionTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpirationTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValidationTimeStamp" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Income">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+          <Property Name="detail" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="categoryId" Type="Int32" />
+          <NavigationProperty Name="IncomeCategory" Relationship="Self.FK_Income_IncomeCategory" FromRole="Income" ToRole="IncomeCategory" />
+          <NavigationProperty Name="IncomePending" Relationship="Self.FK_IncomePending_Income" FromRole="Income" ToRole="IncomePending" />
+        </EntityType>
+        <EntityType Name="IncomeCategory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="disabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Income" Relationship="Self.FK_Income_IncomeCategory" FromRole="IncomeCategory" ToRole="Income" />
+        </EntityType>
+        <EntityType Name="IncomePending">
+          <Key>
+            <PropertyRef Name="incomeId" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="incomeId" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+          <Property Name="waytopayId" Type="Int32" />
+          <NavigationProperty Name="Income" Relationship="Self.FK_IncomePending_Income" FromRole="IncomePending" ToRole="Income" />
+          <NavigationProperty Name="Waytopay" Relationship="Self.FK_IncomePending_Waytopay" FromRole="IncomePending" ToRole="Waytopay" />
+        </EntityType>
+        <EntityType Name="OperationType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+          <Property Name="detail" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="categoryId" Type="Int32" />
+          <NavigationProperty Name="PaymentCategory" Relationship="Self.FK_Payment_PaymentCategory" FromRole="Payment" ToRole="PaymentCategory" />
+          <NavigationProperty Name="PaymentPending" Relationship="Self.FK_PaymentPending_Payment" FromRole="Payment" ToRole="PaymentPending" />
+        </EntityType>
+        <EntityType Name="PaymentCategory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="disabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Payment" Relationship="Self.FK_Payment_PaymentCategory" FromRole="PaymentCategory" ToRole="Payment" />
+        </EntityType>
+        <EntityType Name="PaymentPending">
+          <Key>
+            <PropertyRef Name="paymentId" />
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="paymentId" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+          <Property Name="waytopayId" Type="Int32" />
+          <NavigationProperty Name="Payment" Relationship="Self.FK_PaymentPending_Payment" FromRole="PaymentPending" ToRole="Payment" />
+          <NavigationProperty Name="Waytopay" Relationship="Self.FK_PaymentPending_Waytopay" FromRole="PaymentPending" ToRole="Waytopay" />
+        </EntityType>
+        <EntityType Name="VersionTable">
+          <Key>
+            <PropertyRef Name="key" />
+          </Key>
+          <Property Name="key" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="version" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Waytopay">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="disabled" Type="Boolean" Nullable="false" />
+          <Property Name="typeId" Type="Int32" />
+          <NavigationProperty Name="IncomePending" Relationship="Self.FK_IncomePending_Waytopay" FromRole="Waytopay" ToRole="IncomePending" />
+          <NavigationProperty Name="PaymentPending" Relationship="Self.FK_PaymentPending_Waytopay" FromRole="Waytopay" ToRole="PaymentPending" />
+          <NavigationProperty Name="WaytopayType" Relationship="Self.FK_Waytopay_WaytopayType" FromRole="Waytopay" ToRole="WaytopayType" />
+        </EntityType>
+        <EntityType Name="WaytopayType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="disabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Waytopay" Relationship="Self.FK_Waytopay_WaytopayType" FromRole="WaytopayType" ToRole="Waytopay" />
+        </EntityType>
+        <Association Name="FK_Password_User">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="1" />
+          <End Role="AccountPassword" Type="Self.AccountPassword" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationRecovery_User">
+          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="1" />
+          <End Role="AccountValidationRecovery" Type="Self.AccountValidationRecovery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountValidationRecovery">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Income_IncomeCategory">
+          <End Role="IncomeCategory" Type="Self.IncomeCategory" Multiplicity="0..1" />
+          <End Role="Income" Type="Self.Income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomeCategory">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Income">
+              <PropertyRef Name="categoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IncomePending_Income">
+          <End Role="Income" Type="Self.Income" Multiplicity="1" />
+          <End Role="IncomePending" Type="Self.IncomePending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Income">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="IncomePending">
+              <PropertyRef Name="incomeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IncomePending_Waytopay">
+          <End Role="Waytopay" Type="Self.Waytopay" Multiplicity="0..1" />
+          <End Role="IncomePending" Type="Self.IncomePending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Waytopay">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="IncomePending">
+              <PropertyRef Name="waytopayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_PaymentCategory">
+          <End Role="PaymentCategory" Type="Self.PaymentCategory" Multiplicity="0..1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentCategory">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="categoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentPending_Payment">
+          <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
+          <End Role="PaymentPending" Type="Self.PaymentPending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payment">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentPending">
+              <PropertyRef Name="paymentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentPending_Waytopay">
+          <End Role="Waytopay" Type="Self.Waytopay" Multiplicity="0..1" />
+          <End Role="PaymentPending" Type="Self.PaymentPending" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Waytopay">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PaymentPending">
+              <PropertyRef Name="waytopayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Waytopay_WaytopayType">
+          <End Role="WaytopayType" Type="Self.WaytopayType" Multiplicity="0..1" />
+          <End Role="Waytopay" Type="Self.Waytopay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WaytopayType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Waytopay">
+              <PropertyRef Name="typeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SaleContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccountPassword" EntityType="Self.AccountPassword" />
+          <EntitySet Name="AccountUser" EntityType="Self.AccountUser" />
+          <EntitySet Name="AccountValidationRecovery" EntityType="Self.AccountValidationRecovery" />
+          <EntitySet Name="AccountValidationSignin" EntityType="Self.AccountValidationSignin" />
+          <EntitySet Name="Income" EntityType="Self.Income" />
+          <EntitySet Name="IncomeCategory" EntityType="Self.IncomeCategory" />
+          <EntitySet Name="IncomePending" EntityType="Self.IncomePending" />
+          <EntitySet Name="OperationType" EntityType="Self.OperationType" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" />
+          <EntitySet Name="PaymentCategory" EntityType="Self.PaymentCategory" />
+          <EntitySet Name="PaymentPending" EntityType="Self.PaymentPending" />
+          <EntitySet Name="VersionTable" EntityType="Self.VersionTable" />
+          <EntitySet Name="Waytopay" EntityType="Self.Waytopay" />
+          <EntitySet Name="WaytopayType" EntityType="Self.WaytopayType" />
+          <AssociationSet Name="FK_Password_User" Association="Self.FK_Password_User">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="AccountPassword" EntitySet="AccountPassword" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationRecovery_User" Association="Self.FK_ValidationRecovery_User">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="AccountValidationRecovery" EntitySet="AccountValidationRecovery" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Income_IncomeCategory" Association="Self.FK_Income_IncomeCategory">
+            <End Role="IncomeCategory" EntitySet="IncomeCategory" />
+            <End Role="Income" EntitySet="Income" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IncomePending_Income" Association="Self.FK_IncomePending_Income">
+            <End Role="Income" EntitySet="Income" />
+            <End Role="IncomePending" EntitySet="IncomePending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IncomePending_Waytopay" Association="Self.FK_IncomePending_Waytopay">
+            <End Role="Waytopay" EntitySet="Waytopay" />
+            <End Role="IncomePending" EntitySet="IncomePending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_PaymentCategory" Association="Self.FK_Payment_PaymentCategory">
+            <End Role="PaymentCategory" EntitySet="PaymentCategory" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentPending_Payment" Association="Self.FK_PaymentPending_Payment">
+            <End Role="Payment" EntitySet="Payment" />
+            <End Role="PaymentPending" EntitySet="PaymentPending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentPending_Waytopay" Association="Self.FK_PaymentPending_Waytopay">
+            <End Role="Waytopay" EntitySet="Waytopay" />
+            <End Role="PaymentPending" EntitySet="PaymentPending" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Waytopay_WaytopayType" Association="Self.FK_Waytopay_WaytopayType">
+            <End Role="WaytopayType" EntitySet="WaytopayType" />
+            <End Role="Waytopay" EntitySet="Waytopay" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SaleModelStoreContainer" CdmEntityContainer="SaleContext">
+          <EntitySetMapping Name="AccountPassword">
+            <EntityTypeMapping TypeName="SaleModel.AccountPassword">
+              <MappingFragment StoreEntitySet="AccountPassword">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Iterations" ColumnName="Iterations" />
+                <ScalarProperty Name="Attempts" ColumnName="Attempts" />
+                <ScalarProperty Name="AttemptTimeStamp" ColumnName="AttemptTimeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountUser">
+            <EntityTypeMapping TypeName="SaleModel.AccountUser">
+              <MappingFragment StoreEntitySet="AccountUser">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="Disabled" ColumnName="Disabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountValidationRecovery">
+            <EntityTypeMapping TypeName="SaleModel.AccountValidationRecovery">
+              <MappingFragment StoreEntitySet="AccountValidationRecovery">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InsertionTimeStamp" ColumnName="InsertionTimeStamp" />
+                <ScalarProperty Name="ExpirationTime" ColumnName="ExpirationTime" />
+                <ScalarProperty Name="ValidationTimeStamp" ColumnName="ValidationTimeStamp" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountValidationSignin">
+            <EntityTypeMapping TypeName="SaleModel.AccountValidationSignin">
+              <MappingFragment StoreEntitySet="AccountValidationSignin">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InsertionTimeStamp" ColumnName="InsertionTimeStamp" />
+                <ScalarProperty Name="ExpirationTime" ColumnName="ExpirationTime" />
+                <ScalarProperty Name="ValidationTimeStamp" ColumnName="ValidationTimeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Income">
+            <EntityTypeMapping TypeName="SaleModel.Income">
+              <MappingFragment StoreEntitySet="Income">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomeCategory">
+            <EntityTypeMapping TypeName="SaleModel.IncomeCategory">
+              <MappingFragment StoreEntitySet="IncomeCategory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="disabled" ColumnName="disabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomePending">
+            <EntityTypeMapping TypeName="SaleModel.IncomePending">
+              <MappingFragment StoreEntitySet="IncomePending">
+                <ScalarProperty Name="incomeId" ColumnName="incomeId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="waytopayId" ColumnName="waytopayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OperationType">
+            <EntityTypeMapping TypeName="SaleModel.OperationType">
+              <MappingFragment StoreEntitySet="OperationType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payment">
+            <EntityTypeMapping TypeName="SaleModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentCategory">
+            <EntityTypeMapping TypeName="SaleModel.PaymentCategory">
+              <MappingFragment StoreEntitySet="PaymentCategory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="disabled" ColumnName="disabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentPending">
+            <EntityTypeMapping TypeName="SaleModel.PaymentPending">
+              <MappingFragment StoreEntitySet="PaymentPending">
+                <ScalarProperty Name="paymentId" ColumnName="paymentId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="waytopayId" ColumnName="waytopayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VersionTable">
+            <EntityTypeMapping TypeName="SaleModel.VersionTable">
+              <MappingFragment StoreEntitySet="VersionTable">
+                <ScalarProperty Name="key" ColumnName="key" />
+                <ScalarProperty Name="version" ColumnName="version" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Waytopay">
+            <EntityTypeMapping TypeName="SaleModel.Waytopay">
+              <MappingFragment StoreEntitySet="Waytopay">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="disabled" ColumnName="disabled" />
+                <ScalarProperty Name="typeId" ColumnName="typeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WaytopayType">
+            <EntityTypeMapping TypeName="SaleModel.WaytopayType">
+              <MappingFragment StoreEntitySet="WaytopayType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="disabled" ColumnName="disabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
