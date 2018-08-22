@@ -9,9 +9,9 @@ Sale.DataAccess/obj
 
 SaleWebApi
 
-SaleApp/.idea
-SaleApp/.vscode
-SaleApp/build
-SaleApp/node_modules
-SaleApp/.gitignore
-SaleApp/package-lock.json
+Sale.App/.idea
+Sale.App/.vscode
+Sale.App/build
+Sale.App/node_modules
+Sale.App/.gitignore
+Sale.App/package-lock.json
