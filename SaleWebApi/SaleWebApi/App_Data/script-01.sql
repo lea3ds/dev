@@ -22,6 +22,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo
 		[Salt]					VARCHAR(255)	NOT NULL,
 		[Iterations]			INT				NOT NULL,
 		[Attempts]				INT				NOT NULL,
+		[AttemptTimeStamp]		DATETIME		NULL,
 		PRIMARY KEY ([UserId]),
 		CONSTRAINT [FK_Password_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AccountUser]([Id]),
 	)
