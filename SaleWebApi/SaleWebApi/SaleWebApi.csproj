@@ -124,6 +124,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SaleModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="App_Data\script-01.sql" />
     <Content Include="Entities\SaleModel.edmx.diagram">
       <DependentUpon>SaleModel.edmx</DependentUpon>
     </Content>

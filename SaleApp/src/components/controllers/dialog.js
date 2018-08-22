@@ -1,4 +1,5 @@
 import React from 'react';
+import {strings} from "../../localization/strings";
 import {Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle,Button} from '@material-ui/core';
 
 class Component extends React.Component {
@@ -40,7 +41,7 @@ class Component extends React.Component {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleClose} color="primary" >Ok</Button>
+                    <Button onClick={this.handleClose} color="primary" >{strings.dialog_confirm}</Button>
                 </DialogActions>
             </Dialog>
     }

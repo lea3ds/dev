@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import {logout} from "./_actions";
-import { routes } from './index';
+import {routes, strings} from './index';
 import { Toolbar,Loader } from '../controllers';
 
 class Component extends React.Component {
@@ -17,7 +17,7 @@ class Component extends React.Component {
 
     render() {
         return <div>
-            <Toolbar title={'LOGOUT'}/>
+            <Toolbar title={strings.account_logout_title}/>
             {this.state.confirming ? <Loader/> : null}
         </div>;
     }

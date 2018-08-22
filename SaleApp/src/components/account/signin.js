@@ -1,20 +1,18 @@
 import React from 'react';
 import { connect } from "react-redux";
 import {} from "./_actions";
+import {routes, strings} from './index';
 import { Form, Toolbar, Loader } from '../controllers';
-import {routes} from "./index";
 
 class Component extends React.Component {
     state = {username: '',passwordNew:'',passwordRetry:'', confirming:false};
 
     confirmHandle=()=> {
-        this.setState({confirming:true});
-        setTimeout(() => window.showDialog({title: 'LOGIN', message: 'OK!'}, this.confirmSuccess), 1000);
-    }
-
-    confirmSuccess=()=> {
-        this.setState({confirming:true});
-        this.props.history.push(routes.rootApp.path);
+        this.setState({confirming: true});
+        setTimeout(() => {
+            window.showDialog({title: strings.account_signin_success_title,message: strings.account_signin_success_message}, () => this.props.history.push(routes.rootApp.path));
+            this.setState({confirming: false});
+        }, 1000);
     }
 
     render() {
@@ -22,7 +20,7 @@ class Component extends React.Component {
         return <div>
 
             <Toolbar
-                title={'SIGNIN'}
+                title={strings.account_signin_title}
                 backButton={()=>this.props.history.push(routes.root.path)}
             />
 
@@ -30,23 +28,23 @@ class Component extends React.Component {
 
             <div>
 
-                <Form type='email' label='username'
+                <Form type='email' label={strings.account_signin_username}
                       value={this.state.username}
                       onChange={e => this.setState({username: e.target.value})}
                 />
 
-                <Form type='password' label='new'
+                <Form type='password' label={strings.account_signin_password}
                       value={this.state.passwordNew}
                       onChange={e => this.setState({passwordNew: e.target.value})}
                 />
 
-                <Form type='password' label='retry'
+                <Form type='password' label={strings.account_signin_passwordRetry}
                       value={this.state.passwordRetry}
                       error={(this.state.passwordNew !== this.state.passwordRetry)}
                       onChange={e => this.setState({passwordRetry: e.target.value})}
                 />
 
-                <Form type='button' label='CONFIRM' color="primary"
+                <Form type='button' label={strings.account_signin_confirm} color="primary"
                       disabled={!(!!this.state.username && !!this.state.passwordNew && (this.state.passwordNew === this.state.passwordRetry))}
                       onClick={this.confirmHandle}
                 />

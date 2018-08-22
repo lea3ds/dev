@@ -1,5 +1,7 @@
 import reducer from './_reducer';
 
+import {strings} from "../../localization/strings";
+
 import login from './login';
 import signin from './signin';
 import logout from './logout';
@@ -7,10 +9,9 @@ import password from './password';
 import recovery from './recovery';
 import validRecovery from './validRecovery';
 
-export { reducer };
-
 const routesRoot = '/account';
-export const routes = {
+
+const routes = {
     login: {path: routesRoot + "/login", component: login, isPublic: true},
     signin: {path: routesRoot + "/signin", component: signin, isPublic: true},
     logout: {path: routesRoot + "/logout", component: logout, isPublic: true},
@@ -22,6 +23,5 @@ export const routes = {
 }
 
 
-
-
+export { reducer, routes, routesRoot, strings, };
 

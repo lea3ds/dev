@@ -2,19 +2,17 @@ import React from 'react';
 import { connect } from "react-redux";
 import {} from "./_actions";
 import { Form, Toolbar, Loader } from '../controllers';
-import {routes} from "./index";
+import {routes, strings} from "./index";
 
 class Component extends React.Component {
     state = {passwordNew:'',passwordRetry:'', confirming:false};
 
     confirmHandle=()=> {
-        this.setState({confirming:true});
-        setTimeout(() => window.showDialog({title: 'LOGIN', message: 'OK!'}, this.confirmSuccess), 1000);
-    }
-
-    confirmSuccess=()=> {
-        this.setState({confirming:true});
-        this.props.history.push(routes.root.path);
+        this.setState({confirming: true});
+        setTimeout(() => {
+            window.showDialog({title: strings.account_recovery_success_title,message: strings.account_recovery_success_message}, () => this.props.history.push(routes.root.path));
+            this.setState({confirming: false});
+        }, 1000);
     }
 
     componentDidMount(){
@@ -22,13 +20,12 @@ class Component extends React.Component {
         if (!!!searchParams.get("id")) this.props.history.push(routes.root.path);
     }
 
-
     render() {
 
         return <div>
 
             <Toolbar
-                title={'PASSWORD'}
+                title={strings.account_recovery_title}
                 backButton={()=>this.props.history.push(routes.root.path)}
             />
 
@@ -36,18 +33,18 @@ class Component extends React.Component {
 
             <div>
 
-                <Form type='password' label='new'
+                <Form type='password' label={strings.account_recovery_password}
                       value={this.state.passwordNew}
                       onChange={e => this.setState({passwordNew: e.target.value})}
                 />
 
-                <Form type='password' label='retry'
+                <Form type='password' label={strings.account_recovery_passwordRetry}
                       value={this.state.passwordRetry}
                       error={!(!!this.state.passwordNew && (this.state.passwordNew === this.state.passwordRetry))}
                       onChange={e => this.setState({passwordRetry: e.target.value})}
                 />
 
-                <Form type='button' label='CONFIRM' color="primary"
+                <Form type='button' label={strings.account_recovery_confirm} color="primary"
                       disabled={!(!!this.state.passwordNew && (this.state.passwordNew === this.state.passwordRetry))}
                       onClick={this.confirmHandle}
                 />
