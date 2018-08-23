@@ -11,5 +11,4 @@ Sale.App/.idea
 Sale.App/.vscode
 Sale.App/build
 Sale.App/node_modules
-Sale.App/.gitignore
 Sale.App/package-lock.json
