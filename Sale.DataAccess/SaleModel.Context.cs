@@ -26,7 +26,6 @@ namespace Sale.DataAccess
         }
     
         public virtual DbSet<AccountPassword> AccountPassword { get; set; }
-        public virtual DbSet<AccountUser> AccountUser { get; set; }
         public virtual DbSet<AccountValidationRecovery> AccountValidationRecovery { get; set; }
         public virtual DbSet<AccountValidationSignin> AccountValidationSignin { get; set; }
         public virtual DbSet<Income> Income { get; set; }
@@ -39,5 +38,6 @@ namespace Sale.DataAccess
         public virtual DbSet<VersionTable> VersionTable { get; set; }
         public virtual DbSet<Waytopay> Waytopay { get; set; }
         public virtual DbSet<WaytopayType> WaytopayType { get; set; }
+        public virtual DbSet<AccountUser> AccountUser { get; set; }
     }
 }

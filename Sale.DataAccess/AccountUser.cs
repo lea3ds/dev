@@ -21,9 +21,7 @@ namespace Sale.DataAccess
         }
     
         public long Id { get; set; }
-        public string Name { get; set; }
-        public string Mail { get; set; }
-        public bool Disabled { get; set; }
+        public string Email { get; set; }
     
         public virtual AccountPassword AccountPassword { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

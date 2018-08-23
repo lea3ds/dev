@@ -8,9 +8,7 @@ DROP TABLE [dbo].[AccountUser]
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'AccountUser')
 	CREATE TABLE [dbo].[AccountUser] (
 		[Id]					BIGINT			NOT NULL	IDENTITY (1, 1),
-		[Name]					VARCHAR (255)	NOT NULL,
-		[Mail]					VARCHAR (255)	NOT NULL,
-		[Disabled]				BIT				NOT NULL,
+		[Email]					VARCHAR (255)	NOT NULL,
 		PRIMARY KEY CLUSTERED ([Id] ASC),
 	);
 

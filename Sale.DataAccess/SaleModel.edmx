@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SaleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SaleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccountPassword">
           <Key>
             <PropertyRef Name="UserId" />
@@ -21,9 +21,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Mail" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Disabled" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="AccountValidationRecovery">
           <Key>
@@ -291,8 +289,7 @@
             <End Role="Waytopay" EntitySet="Waytopay" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SaleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -306,18 +303,7 @@
           <Property Name="Iterations" Type="Int32" Nullable="false" />
           <Property Name="Attempts" Type="Int32" Nullable="false" />
           <Property Name="AttemptTimeStamp" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="AccountUser" Relationship="Self.FK_Password_User" FromRole="AccountPassword" ToRole="AccountUser" />
-        </EntityType>
-        <EntityType Name="AccountUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Mail" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Disabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AccountPassword" Relationship="Self.FK_Password_User" FromRole="AccountUser" ToRole="AccountPassword" />
-          <NavigationProperty Name="AccountValidationRecovery" Relationship="Self.FK_ValidationRecovery_User" FromRole="AccountUser" ToRole="AccountValidationRecovery" />
+          <NavigationProperty Name="AccountUser" Relationship="SaleModel.FK_Password_User" FromRole="AccountPassword" ToRole="AccountUser" />
         </EntityType>
         <EntityType Name="AccountValidationRecovery">
           <Key>
@@ -328,7 +314,7 @@
           <Property Name="ExpirationTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ValidationTimeStamp" Type="DateTime" Precision="3" />
           <Property Name="UserId" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="AccountUser" Relationship="Self.FK_ValidationRecovery_User" FromRole="AccountValidationRecovery" ToRole="AccountUser" />
+          <NavigationProperty Name="AccountUser" Relationship="SaleModel.FK_ValidationRecovery_User" FromRole="AccountValidationRecovery" ToRole="AccountUser" />
         </EntityType>
         <EntityType Name="AccountValidationSignin">
           <Key>
@@ -440,30 +426,6 @@
           <Property Name="disabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Waytopay" Relationship="Self.FK_Waytopay_WaytopayType" FromRole="WaytopayType" ToRole="Waytopay" />
         </EntityType>
-        <Association Name="FK_Password_User">
-          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="1" />
-          <End Role="AccountPassword" Type="Self.AccountPassword" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="AccountUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountPassword">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ValidationRecovery_User">
-          <End Role="AccountUser" Type="Self.AccountUser" Multiplicity="1" />
-          <End Role="AccountValidationRecovery" Type="Self.AccountValidationRecovery" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AccountValidationRecovery">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Income_IncomeCategory">
           <End Role="IncomeCategory" Type="Self.IncomeCategory" Multiplicity="0..1" />
           <End Role="Income" Type="Self.Income" Multiplicity="*" />
@@ -550,7 +512,6 @@
         </Association>
         <EntityContainer Name="SaleContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccountPassword" EntityType="Self.AccountPassword" />
-          <EntitySet Name="AccountUser" EntityType="Self.AccountUser" />
           <EntitySet Name="AccountValidationRecovery" EntityType="Self.AccountValidationRecovery" />
           <EntitySet Name="AccountValidationSignin" EntityType="Self.AccountValidationSignin" />
           <EntitySet Name="Income" EntityType="Self.Income" />
@@ -563,14 +524,6 @@
           <EntitySet Name="VersionTable" EntityType="Self.VersionTable" />
           <EntitySet Name="Waytopay" EntityType="Self.Waytopay" />
           <EntitySet Name="WaytopayType" EntityType="Self.WaytopayType" />
-          <AssociationSet Name="FK_Password_User" Association="Self.FK_Password_User">
-            <End Role="AccountUser" EntitySet="AccountUser" />
-            <End Role="AccountPassword" EntitySet="AccountPassword" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ValidationRecovery_User" Association="Self.FK_ValidationRecovery_User">
-            <End Role="AccountUser" EntitySet="AccountUser" />
-            <End Role="AccountValidationRecovery" EntitySet="AccountValidationRecovery" />
-          </AssociationSet>
           <AssociationSet Name="FK_Income_IncomeCategory" Association="Self.FK_Income_IncomeCategory">
             <End Role="IncomeCategory" EntitySet="IncomeCategory" />
             <End Role="Income" EntitySet="Income" />
@@ -599,7 +552,49 @@
             <End Role="WaytopayType" EntitySet="WaytopayType" />
             <End Role="Waytopay" EntitySet="Waytopay" />
           </AssociationSet>
+          <EntitySet Name="AccountUser" EntityType="SaleModel.AccountUser" />
+          <AssociationSet Name="FK_Password_User" Association="SaleModel.FK_Password_User">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="AccountPassword" EntitySet="AccountPassword" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ValidationRecovery_User" Association="SaleModel.FK_ValidationRecovery_User">
+            <End Role="AccountUser" EntitySet="AccountUser" />
+            <End Role="AccountValidationRecovery" EntitySet="AccountValidationRecovery" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="AccountUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccountPassword" Relationship="SaleModel.FK_Password_User" FromRole="AccountUser" ToRole="AccountPassword" />
+          <NavigationProperty Name="AccountValidationRecovery" Relationship="SaleModel.FK_ValidationRecovery_User" FromRole="AccountUser" ToRole="AccountValidationRecovery" />
+        </EntityType>
+        <Association Name="FK_Password_User">
+          <End Type="SaleModel.AccountUser" Role="AccountUser" Multiplicity="1" />
+          <End Type="SaleModel.AccountPassword" Role="AccountPassword" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ValidationRecovery_User">
+          <End Type="SaleModel.AccountUser" Role="AccountUser" Multiplicity="1" />
+          <End Type="SaleModel.AccountValidationRecovery" Role="AccountValidationRecovery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccountValidationRecovery">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -615,16 +610,6 @@
                 <ScalarProperty Name="Iterations" ColumnName="Iterations" />
                 <ScalarProperty Name="Attempts" ColumnName="Attempts" />
                 <ScalarProperty Name="AttemptTimeStamp" ColumnName="AttemptTimeStamp" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AccountUser">
-            <EntityTypeMapping TypeName="SaleModel.AccountUser">
-              <MappingFragment StoreEntitySet="AccountUser">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Mail" ColumnName="Mail" />
-                <ScalarProperty Name="Disabled" ColumnName="Disabled" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -741,6 +726,14 @@
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="disabled" ColumnName="disabled" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountUser">
+            <EntityTypeMapping TypeName="SaleModel.AccountUser">
+              <MappingFragment StoreEntitySet="AccountUser">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

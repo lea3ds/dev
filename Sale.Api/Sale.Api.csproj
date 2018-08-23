@@ -135,8 +135,10 @@
   <ItemGroup>
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="AuthorizationServer\PasswordHelper.cs" />
     <Compile Include="AuthorizationServer\TokenProvider.cs" />
     <Compile Include="AuthorizationServer\RefreshTokenProvider.cs" />
+    <Compile Include="Controllers\AccountPublicController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\IncomeCategoryController.cs" />
@@ -168,9 +170,17 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Sale.Core\Sale.Core.csproj">
+      <Project>{209d2fea-e61f-4154-911f-8ca0a226fd9d}</Project>
+      <Name>Sale.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sale.DataAccess\Sale.DataAccess.csproj">
       <Project>{4dd804ca-5050-473a-9795-432fc1dd0e6e}</Project>
       <Name>Sale.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sale.Resources\Sale.Resources.csproj">
+      <Project>{110b095c-2e74-458f-84e5-a8cb98211d96}</Project>
+      <Name>Sale.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

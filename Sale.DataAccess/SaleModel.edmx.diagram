@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="82ea0bd2cb85433090daad58462b8d87" Name="Diagram1">
         <EntityTypeShape EntityType="SaleModel.AccountPassword" Width="1.5" PointX="11" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SaleModel.AccountUser" Width="1.5" PointX="8.75" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SaleModel.AccountValidationRecovery" Width="1.5" PointX="11" PointY="10.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SaleModel.AccountValidationSignin" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SaleModel.Income" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
@@ -19,8 +18,6 @@
         <EntityTypeShape EntityType="SaleModel.VersionTable" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SaleModel.Waytopay" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SaleModel.WaytopayType" Width="1.5" PointX="0.75" PointY="3" IsExpanded="true" />
-        <AssociationConnector Association="SaleModel.FK_Password_User" ManuallyRouted="false" />
-        <AssociationConnector Association="SaleModel.FK_ValidationRecovery_User" ManuallyRouted="false" />
         <AssociationConnector Association="SaleModel.FK_Income_IncomeCategory" ManuallyRouted="false" />
         <AssociationConnector Association="SaleModel.FK_IncomePending_Income" ManuallyRouted="false" />
         <AssociationConnector Association="SaleModel.FK_IncomePending_Waytopay" ManuallyRouted="false" />
@@ -28,6 +25,9 @@
         <AssociationConnector Association="SaleModel.FK_PaymentPending_Payment" ManuallyRouted="false" />
         <AssociationConnector Association="SaleModel.FK_PaymentPending_Waytopay" ManuallyRouted="false" />
         <AssociationConnector Association="SaleModel.FK_Waytopay_WaytopayType" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SaleModel.AccountUser" Width="1.5" PointX="8.75" PointY="8.875" />
+        <AssociationConnector Association="SaleModel.FK_Password_User" />
+        <AssociationConnector Association="SaleModel.FK_ValidationRecovery_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

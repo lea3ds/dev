@@ -1,5 +1,9 @@
 ﻿using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -16,25 +20,46 @@ namespace Sale.Api.AuthorizationServer
 
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            if (context.UserName == "admin" || context.Password == "123456")
+            try
             {
-                var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                using (var db = new DataAccess.SaleContext())
+                {
+                    var now = DateTime.Now;
+                    var pass = db.AccountPassword.FirstOrDefault(x => x.AccountUser.Email.Equals(context.UserName, StringComparison.InvariantCultureIgnoreCase));
+                    if (pass == null) throw new InvalidCredentialException();
+                    var isValid = PasswordHelper.IsValid(context.Password, new HashInfo { Hash = pass.Hash, Salt = pass.Salt, Iterations = pass.Iterations });
 
-                var ticket = new AuthenticationTicket(claimsIdentity, null);
-                context.Validated(ticket);
+                    if (!isValid)
+                    {
+                        pass.Attempts++;
+                        pass.AttemptTimeStamp = now;
+                        db.SaveChanges();
+                        throw new InvalidCredentialException();
+                    }
+
+                    pass.Attempts = 0;
+                    pass.AttemptTimeStamp = now;
+                    db.SaveChanges();
+
+                    var claimsIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+                    claimsIdentity.AddClaim(new Claim("UserId", pass.UserId.ToString()));
+                    //identity.AddClaim(new Claim("SessionId", Guid.NewGuid().ToString()));
+                    //claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+                    //claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                    var ticket = new AuthenticationTicket(claimsIdentity, null);
+                    context.Validated(ticket);
+
+                }
+                return Task.FromResult<object>(null);
             }
-
-            return Task.FromResult<object>(null);
-            /*
-            var mail = context.UserName;
-            var password = context.Password;
-            var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim(ClaimTypes.Name, mail));
-            context.Validated(identity);
-            return base.GrantResourceOwnerCredentials(context);
-            */
+            catch (InvalidCredentialException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
