@@ -7,7 +7,7 @@ export const login = (username,password) => (dispatch, getState) => {
         let data = queryString.stringify({grant_type: 'password', username: username, password: password});
         let reducer = 'ACCOUNT_LOGIN';
 
-        dispatch({type: reducer, payload: data.grant_type});
+        dispatch({type: reducer + '_REQUEST', payload: data.grant_type});
         return conn.post(url,data)
             .then(x => {
                 dispatch({type: reducer + '_SUCCESS', payload: x.data});
@@ -22,18 +22,19 @@ export const login = (username,password) => (dispatch, getState) => {
 
 export const logout = () => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
-        dispatch({type: 'ACCOUNT_LOGOUT'});
+        let reducer = 'ACCOUNT_LOGOUT';
+        dispatch({type: reducer + '_REQUEST'});
         setTimeout(resolve, 2000);
     })
 }
 
 export const password = (passwordOld,passwordNew) => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
-        let url = 'account/password';
-        let data = {passwordOld: passwordOld, passwordOld: passwordNew};
+        let url = 'account/passwordNew';
+        let data = {passwordOld: passwordOld, passwordNew: passwordNew};
         let reducer = 'ACCOUNT_PASSWORD';
 
-        dispatch({type: reducer});
+        dispatch({type: reducer + '_REQUEST'});
         return conn.post(url,data)
             .then(x => {
                 dispatch({type: reducer + '_SUCCESS'});
@@ -46,3 +47,21 @@ export const password = (passwordOld,passwordNew) => (dispatch, getState) => {
     })
 }
 
+export const signin = (username,password) => (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+        let url = 'accountpublic/signin';
+        let data = {username: username, passwordNew: password};
+        let reducer = 'ACCOUNT_SIGNIN';
+
+        dispatch({type: reducer + '_REQUEST'});
+        return conn.post(url,data)
+            .then(x => {
+                dispatch({type: reducer + '_SUCCESS', payload: x.data});
+                return resolve(x);
+            })
+            .catch(x => {
+                dispatch({type: reducer + '_FAILURE'});
+                return reject(x);
+            })
+    })
+}

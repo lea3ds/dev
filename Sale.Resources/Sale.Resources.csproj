@@ -41,7 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\BadRequestException.cs" />
-    <Compile Include="Exceptions\SigninUserExistsException.cs" />
+    <Compile Include="Requests\AccountLoginRequest.cs" />
+    <Compile Include="Requests\AccountLoginResponse.cs" />
+    <Compile Include="Requests\AccountPasswordRequest.cs" />
+    <Compile Include="Requests\AccountPasswordResponse.cs" />
     <Compile Include="Requests\AccountSigninRequest.cs" />
     <Compile Include="Requests\AccountSigninResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

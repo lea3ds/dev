@@ -12,5 +12,5 @@ export default combineReducers({
     authenticationStore,
     dataArrays: synchronizerStore,
     paymentStore,
-    //account,
+    account,
 });

@@ -2,6 +2,5 @@
 {
     public class AccountSigninResponse:BaseResponse
     {
-
     }
 }

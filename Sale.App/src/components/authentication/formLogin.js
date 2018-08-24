@@ -8,13 +8,13 @@ class Component extends React.Component {
         super(props);
         this.state = {
             username: '',
-            password: '',
+            passwordNew: '',
         }
 
     }
 
     handleClick = () => {
-        this.props.login(this.props, this.state.username + '|' + this.state.password);
+        this.props.login(this.props, this.state.username + '|' + this.state.passwordNew);
     };
 
 
@@ -33,9 +33,9 @@ class Component extends React.Component {
 
                 id="password"
                 label="Password"
-                onChange={e => this.setState({ password: e.target.value })}
+                onChange={e => this.setState({ passwordNew: e.target.value })}
                 type={"password"}
-                value={this.state.password}
+                value={this.state.passwordNew}
                 fullWidth />
 
             <div style={{ marginTop: 5 }} />

@@ -1,7 +1,38 @@
 import axios from "axios";
 import * as queryString from 'querystring'
+import moment from "moment/moment";
 var urlBase = process.env.REACT_APP_SERVER_ADDR;
 
+
+var AUTHORIZATION_STORAGE = 'AUTHORIZATION';
+
+export const authorization_valid=(data)=> {
+    var data = storageGet(AUTHORIZATION_STORAGE);
+    try {
+        if (!!data
+            && !!data.token_type
+            && !!data.access_token
+            && !!data.refresh_token
+            && !!data.expireTime
+            &&  (data.expireTime - moment().unix())>0
+        ) return true;
+    }
+    catch(ex) {}
+    authorization_set();
+    return false;
+}
+
+export const authorization_set=(data)=> {
+    if (!!data) {
+        if (!!!data.expires_in) data.expires_in = -1;
+        var now = moment();
+        var requestTime = now.unix();
+        var expireTime = now.add(data.expires_in, 's').unix();
+        storageSet(AUTHORIZATION_STORAGE,{...data,requestTime: requestTime,expireTime: expireTime});
+    }else{
+        storageSet(AUTHORIZATION_STORAGE);
+    }
+}
 
 export const configure = () =>  (dispatch, getState) => {
     axios.interceptors.request.use(

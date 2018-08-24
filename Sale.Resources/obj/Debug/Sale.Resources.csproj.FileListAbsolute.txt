@@ -1,0 +1,6 @@
+C:\GitHub\Sale\Sale.Resources\bin\Debug\Sale.Resources.dll
+C:\GitHub\Sale\Sale.Resources\bin\Debug\Sale.Resources.pdb
+C:\GitHub\Sale\Sale.Resources\obj\Debug\Sale.Resources.csproj.CoreCompileInputs.cache
+C:\GitHub\Sale\Sale.Resources\obj\Debug\Sale.Resources.dll
+C:\GitHub\Sale\Sale.Resources\obj\Debug\Sale.Resources.pdb
+C:\GitHub\Sale\Sale.Resources\obj\Debug\Sale.Resources.csprojResolveAssemblyReference.cache

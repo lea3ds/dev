@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import {} from "./_actions";
+import {signin} from "./_actions";
 import {routes, strings} from './index';
 import { Form, Toolbar, Loader } from '../controllers';
 
@@ -9,10 +9,15 @@ class Component extends React.Component {
 
     confirmHandle=()=> {
         this.setState({confirming: true});
-        setTimeout(() => {
-            window.showDialog({title: strings.account_signin_success_title,message: strings.account_signin_success_message}, () => this.props.history.push(routes.rootApp.path));
-            this.setState({confirming: false});
-        }, 1000);
+        this.props.signin(this.state.username, this.state.passwordNew)
+            .then(() => {
+                window.showDialog({title: strings.account_signin_success_title, message: strings.account_signin_success_message}, () => this.props.history.push(routes.rootApp.path));
+                this.setState({confirming: false});
+            })
+            .catch(() => {
+                window.showDialog({title: strings.account_signin_failure_title, message: strings.account_signin_failure_message});
+                this.setState({confirming: false});
+            })
     }
 
     render() {
@@ -55,7 +60,7 @@ class Component extends React.Component {
     }
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {signin};
 const mapStateToProps = store => ({ });
 export default connect(mapStateToProps, mapDispatchToProps)(Component);
 

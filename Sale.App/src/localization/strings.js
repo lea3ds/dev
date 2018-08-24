@@ -4,7 +4,7 @@ export const strings = {
 
     account_login_title:'#LOGIN',
     account_login_username:'#username',
-    account_login_password:'#password',
+    account_login_password:'#passwordNew',
     account_login_confirm:'#Login',
     account_login_failure_title:'#Error',
     account_login_failure_message:'#Ups!',
@@ -25,7 +25,7 @@ export const strings = {
 
     account_recovery_title:'#RECOVERY',
     account_recovery_username:'#username',
-    account_recovery_password:'#password',
+    account_recovery_password:'#passwordNew',
     account_recovery_passwordRetry:'#passwordRetry',
     account_recovery_confirm:'#Confirm',
     account_recovery_success_title:'#Message',
@@ -33,7 +33,7 @@ export const strings = {
 
     account_signin_title:'#SIGNIN',
     account_signin_username:'#username',
-    account_signin_password:'#password',
+    account_signin_password:'#passwordNew',
     account_signin_passwordRetry:'#passwordRetry',
     account_signin_confirm:'#Confirm',
     account_signin_success_title:'#Message',
