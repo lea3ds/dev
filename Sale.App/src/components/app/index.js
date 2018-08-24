@@ -43,7 +43,7 @@ class Component extends React.Component {
         return (
             <section>
 
-                <Menu menuLinks={menuLinks} isAuthenticated={this.props.authentication.isAuthenticated} />
+                <Menu menuLinks={menuLinks} isAuthenticated={this.props.account.isAuthenticated} />
 
                 <Dialog />
 
@@ -51,7 +51,7 @@ class Component extends React.Component {
                     routes={this.allRoutes}
                     history={this.props.history}
                     authPath={routesAccount.root}
-                    isAuthenticated={this.props.authentication.isAuthenticated}
+                    isAuthenticated={this.props.account.isAuthenticated}
                 />
 
 
@@ -63,6 +63,6 @@ class Component extends React.Component {
 }
 
 const mapDispatchToProps = { };
-const mapStateToProps = store => ({ appWraper: store.appWraper, authentication: store.authenticationStore });
+const mapStateToProps = store => ({ appWraper: store.appWraper, account: store.account });
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Component));
 // el [withRouter] aca hace que renderice este componente cada vez que hay un cambio de URL

@@ -5,7 +5,7 @@ import { Form, Toolbar, Loader } from '../controllers';
 import {routes, strings} from "./index";
 
 class Component extends React.Component {
-    state = {passwordNew:'',passwordRetry:'', confirming:false};
+    state = {password:'',passwordRetry:'', confirming:false};
 
     confirmHandle=()=> {
         this.setState({confirming: true});
@@ -34,18 +34,18 @@ class Component extends React.Component {
             <div>
 
                 <Form type='password' label={strings.account_recovery_password}
-                      value={this.state.passwordNew}
-                      onChange={e => this.setState({passwordNew: e.target.value})}
+                      value={this.state.password}
+                      onChange={e => this.setState({password: e.target.value})}
                 />
 
                 <Form type='password' label={strings.account_recovery_passwordRetry}
                       value={this.state.passwordRetry}
-                      error={!(!!this.state.passwordNew && (this.state.passwordNew === this.state.passwordRetry))}
+                      error={!(!!this.state.password && (this.state.password === this.state.passwordRetry))}
                       onChange={e => this.setState({passwordRetry: e.target.value})}
                 />
 
                 <Form type='button' label={strings.account_recovery_confirm} color="primary"
-                      disabled={!(!!this.state.passwordNew && (this.state.passwordNew === this.state.passwordRetry))}
+                      disabled={!(!!this.state.password && (this.state.password === this.state.passwordRetry))}
                       onClick={this.confirmHandle}
                 />
 

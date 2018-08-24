@@ -5,10 +5,11 @@ export const login = (username,password) => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
         let url = 'token';
         let data = queryString.stringify({grant_type: 'password', username: username, password: password});
+        let config = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
         let reducer = 'ACCOUNT_LOGIN';
 
         dispatch({type: reducer + '_REQUEST', payload: data.grant_type});
-        return conn.post(url,data)
+        return conn.post(url,data,config)
             .then(x => {
                 dispatch({type: reducer + '_SUCCESS', payload: x.data});
                 return resolve(x);
@@ -30,7 +31,7 @@ export const logout = () => (dispatch, getState) => {
 
 export const password = (passwordOld,passwordNew) => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
-        let url = 'account/passwordNew';
+        let url = 'account/password';
         let data = {passwordOld: passwordOld, passwordNew: passwordNew};
         let reducer = 'ACCOUNT_PASSWORD';
 
@@ -50,7 +51,7 @@ export const password = (passwordOld,passwordNew) => (dispatch, getState) => {
 export const signin = (username,password) => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
         let url = 'accountpublic/signin';
-        let data = {username: username, passwordNew: password};
+        let data = {username: username, password: password};
         let reducer = 'ACCOUNT_SIGNIN';
 
         dispatch({type: reducer + '_REQUEST'});

@@ -5,11 +5,11 @@ import {routes, strings} from './index';
 import { Form, Toolbar, Loader } from '../controllers';
 
 class Component extends React.Component {
-    state = {username: '',passwordNew:'',passwordRetry:'', confirming:false};
+    state = {username: '',password:'',passwordRetry:'', confirming:false};
 
     confirmHandle=()=> {
         this.setState({confirming: true});
-        this.props.signin(this.state.username, this.state.passwordNew)
+        this.props.signin(this.state.username, this.state.password)
             .then(() => {
                 window.showDialog({title: strings.account_signin_success_title, message: strings.account_signin_success_message}, () => this.props.history.push(routes.rootApp.path));
                 this.setState({confirming: false});
@@ -39,18 +39,18 @@ class Component extends React.Component {
                 />
 
                 <Form type='password' label={strings.account_signin_password}
-                      value={this.state.passwordNew}
-                      onChange={e => this.setState({passwordNew: e.target.value})}
+                      value={this.state.password}
+                      onChange={e => this.setState({password: e.target.value})}
                 />
 
                 <Form type='password' label={strings.account_signin_passwordRetry}
                       value={this.state.passwordRetry}
-                      error={(this.state.passwordNew !== this.state.passwordRetry)}
+                      error={(this.state.password !== this.state.passwordRetry)}
                       onChange={e => this.setState({passwordRetry: e.target.value})}
                 />
 
                 <Form type='button' label={strings.account_signin_confirm} color="primary"
-                      disabled={!(!!this.state.username && !!this.state.passwordNew && (this.state.passwordNew === this.state.passwordRetry))}
+                      disabled={!(!!this.state.username && !!this.state.password && (this.state.password === this.state.passwordRetry))}
                       onClick={this.confirmHandle}
                 />
 

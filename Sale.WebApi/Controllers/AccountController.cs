@@ -12,7 +12,7 @@ namespace Sale.WebApi.Controllers
     {
         [HttpPost]
         [ActionName("Password")]
-        public AccountPasswordResponse Signin(AccountPasswordRequest request)
+        public AccountPasswordResponse Password(AccountPasswordRequest request)
         {
             request.UserId = UserId;
             return Core.Account.Instance.Password(request);

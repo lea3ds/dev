@@ -18,13 +18,17 @@ export const authorization_valid=(data)=> {
         ) return true;
     }
     catch(ex) {}
-    authorization_set();
     return false;
+}
+
+export const authorization_get=()=> {
+    return storageGet(AUTHORIZATION_STORAGE);
 }
 
 export const authorization_set=(data)=> {
     if (!!data) {
         if (!!!data.expires_in) data.expires_in = -1;
+        data.expires_in = 20;
         var now = moment();
         var requestTime = now.unix();
         var expireTime = now.add(data.expires_in, 's').unix();
@@ -37,18 +41,24 @@ export const authorization_set=(data)=> {
 export const configure = () =>  (dispatch, getState) => {
     axios.interceptors.request.use(
         (request) => {
-            if (request.url.includes('token')) {
-                delete request.headers['Authorization'];
-                request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-                return request;
+            // if (request.url.includes('token')) {
+            //     delete request.headers['Authorization'];
+            //     request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            //     return request;
+            // }
+
+            if (authorization_valid()) {
+                var auth = authorization_get();
+                request.headers['Authorization'] = auth.token_type + ' ' + auth.access_token;
             }
-            var {isAuthenticated, token} = getState().authenticationStore;
-            if (isAuthenticated === true)
-                request.headers['Authorization'] = token.token_type + ' ' + token.access_token;
+
+            // var {isAuthenticated, token} = getState().authenticationStore;
+            // if (isAuthenticated === true)
+            //     request.headers['Authorization'] = token.token_type + ' ' + token.access_token;
 
             if (!!!request.headers['Content-Type'])
                 request.headers['Content-Type'] = 'application/json';
-
+            console.log("RESQUEST -> ",request);
             return request;
         },
         (error) => {
@@ -77,23 +87,55 @@ export const connectionResponseErrorHandles = (error) => (dispatch, getState) =>
         dispatch({type: 'CONNECTION_NETWORK_ERROR', payload: error});
         return Promise.reject(error);
     }
+
     if (error.response.status === 401) {
-        const data = {grant_type: 'refresh_token', refresh_token: getState().authenticationStore.token.refresh_token};
-        return dispatch(token(data))
+        return dispatch(refresh_token())
             .then(() => error.config)
             .catch(() => Promise.reject(error))
     }
-    if (error.response.status === 400 && error.config.url.includes('token')) {
-        dispatch({type: 'AUTHENTICATION_LOGOUT', payload: error});
-        return Promise.reject(error);
-    }
+
+    // if (error.response.status === 401) {
+    //     const data = {grant_type: 'refresh_token', refresh_token: getState().authenticationStore.token.refresh_token};
+    //     return dispatch(token(data))
+    //         .then(() => error.config)
+    //         .catch(() => Promise.reject(error))
+    // }
+
+    // if (error.response.status === 400 && error.config.url.includes('token')) {
+    //     dispatch({type: 'AUTHENTICATION_LOGOUT', payload: error});
+    //     return Promise.reject(error);
+    // }
 
     dispatch({type: 'CONNECTION_RESPONSE_ERROR', payload: error});
     return Promise.reject(error);
 }
 
+const refresh_token=()=> (dispatch, getState) => {
+    var auth = authorization_get();
+    if (!!!auth.refresh_token) return Promise.reject();
+
+    let url = 'token';
+    let data = queryString.stringify({grant_type: 'refresh_token', refresh_token: auth.refresh_token});
+    let config = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+    let reducer = 'ACCOUNT_LOGIN';
+    dispatch({type: reducer + '_REQUEST', payload: 'refresh_token'});
+    return post(url,data,config)
+        .then(x => {
+            console.log("x",x);
+            dispatch({type: reducer + '_SUCCESS', payload: x.data});
+            return x;
+        })
+        .catch(x => {
+            console.log("x error ",x);
+            dispatch({type: reducer + '_FAILURE'});
+            return Promise.reject(x);
+        })
+}
+
 export const token=(data)=>(dispatch, getState) => {
-    var grantType = '';(data.grant_type === 'refresh_token')?'_REFRESH':'_GET';
+    var grantType = '';
+    (data.grant_type === 'refresh_token')?'_REFRESH':'_GET';
     dispatch({type: 'AUTHENTICATION_TOKEN'+grantType, payload: data.grant_type});
     return axios.post(urlBase + 'token', queryString.stringify(data))
         .then(response => {
