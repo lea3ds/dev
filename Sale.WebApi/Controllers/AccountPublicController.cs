@@ -21,5 +21,12 @@ namespace Sale.WebApi.Controllers
             return Core.Account.Instance.Signin(request);
         }
 
+        [HttpGet]
+        [ActionName("Ping")]
+        public bool Ping()
+        {
+            //throw new  ApplicationException("Hola");
+            return true;
+        }
     }
 }

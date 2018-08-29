@@ -4,8 +4,8 @@ import { withRouter } from "react-router-dom";
 
 import Router from './router'
 import {Dialog, Menu} from '../controllers';
-// ROUTES
 
+// ROUTES
 import { routes as routesAccount } from '../../components/account';
 import { routes as routesAuthentication } from '../../components/authentication';
 import { routes as routesHome } from '../pages/home';
@@ -17,7 +17,7 @@ import { routes as routesWaytopayType } from '../../components/pages/WaytopayTyp
 
 const menuLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Authentication', href: '/authentication' },
+    { name: 'Authentication', href: '/account' },
     { name: 'Payment', href: '/Payment' },
     { name: 'Payment Category', href: '/PaymentCategory' },
     { name: 'Waytopay', href: '/Waytopay' },

@@ -1,20 +1,27 @@
 import axios from "axios";
 import * as queryString from 'querystring'
 import moment from "moment/moment";
+import {routes, strings} from "../components/account";
 var urlBase = process.env.REACT_APP_SERVER_ADDR;
 
 
-var AUTHORIZATION_STORAGE = 'AUTHORIZATION';
+export const storageAuthenticating = "connection.authenticating";
+const storageAuthorization = 'AUTHORIZATION';
+const storageTransactionId = "connection.transactionId";
+const connectionError = 'connectionError';
+const isAuthenticatingError = 'isAuthenticatingError';
+const contentTypeHeader = {json:'application/json', urlencoded:'application/x-www-form-urlencoded'};
+
 
 export const authorization_valid=(data)=> {
-    var data = storageGet(AUTHORIZATION_STORAGE);
+    var data = storageGet(storageAuthorization);
     try {
         if (!!data
             && !!data.token_type
             && !!data.access_token
             && !!data.refresh_token
-            && !!data.expireTime
-            &&  (data.expireTime - moment().unix())>0
+            //&& !!data.expireTime
+            //&&  (data.expireTime - moment().unix())>0
         ) return true;
     }
     catch(ex) {}
@@ -22,49 +29,54 @@ export const authorization_valid=(data)=> {
 }
 
 export const authorization_get=()=> {
-    return storageGet(AUTHORIZATION_STORAGE);
+    return storageGet(storageAuthorization);
 }
 
 export const authorization_set=(data)=> {
     if (!!data) {
-        if (!!!data.expires_in) data.expires_in = -1;
-        data.expires_in = 20;
-        var now = moment();
-        var requestTime = now.unix();
-        var expireTime = now.add(data.expires_in, 's').unix();
-        storageSet(AUTHORIZATION_STORAGE,{...data,requestTime: requestTime,expireTime: expireTime});
+        // if (!!!data.expires_in) data.expires_in = -1;
+        // data.expires_in = 20;
+        // var now = moment();
+        // var requestTime = now.unix();
+        // var expireTime = now.add(data.expires_in, 's').unix();
+        // storageSet(AUTHORIZATION_STORAGE,{...data,requestTime: requestTime,expireTime: expireTime});
+        storageSet(storageAuthorization,{...data});
     }else{
-        storageSet(AUTHORIZATION_STORAGE);
+        storageSet(storageAuthorization);
     }
 }
 
+const ping = () => {
+    var url = authorization_valid()?'account/ping':'accountPublic/ping';
+    get(url)
+        .then(e=>console.log("PING OK: ",url,"DATA: ",e))
+        .catch(e=>console.log("PING URL: ",url,"ERROR: ",e));
+}
+
+
 export const configure = () =>  (dispatch, getState) => {
+
+    setInterval(() => ping(), 10000);
+
     axios.interceptors.request.use(
         (request) => {
-            // if (request.url.includes('token')) {
-            //     delete request.headers['Authorization'];
-            //     request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-            //     return request;
-            // }
 
             if (authorization_valid()) {
                 var auth = authorization_get();
                 request.headers['Authorization'] = auth.token_type + ' ' + auth.access_token;
             }
 
-            // var {isAuthenticated, token} = getState().authenticationStore;
-            // if (isAuthenticated === true)
-            //     request.headers['Authorization'] = token.token_type + ' ' + token.access_token;
-
             if (!!!request.headers['Content-Type'])
-                request.headers['Content-Type'] = 'application/json';
-            console.log("RESQUEST -> ",request);
+                request.headers['Content-Type'] = contentTypeHeader.json;
+
+            if (request.headers['Content-Type'] === contentTypeHeader.urlencoded)
+                request.data = queryString.stringify(request.data);
+
             return request;
         },
         (error) => {
-            return dispatch(connectionRequestErrorHandles(error))
-                .then(originalRequestEdited => axios(originalRequestEdited))
-                .catch(err => Promise.reject(err))
+            dispatch({type: 'CONNECTION_REQUEST_ERROR', payload: error});
+            return Promise.reject(error);
         });
 
     axios.interceptors.response.use(
@@ -76,17 +88,11 @@ export const configure = () =>  (dispatch, getState) => {
         });
 }
 
-export const connectionRequestErrorHandles = (error) => (dispatch, getState) => {
-    console.log("CONNECTION_REQUEST_ERROR !!!! no controlado.");
-    dispatch({type: 'CONNECTION_REQUEST_ERROR', payload: error});
-    return Promise.reject(error);
-}
-
 export const connectionResponseErrorHandles = (error) => (dispatch, getState) => {
-    if (!!!error.response) {
-        dispatch({type: 'CONNECTION_NETWORK_ERROR', payload: error});
-        return Promise.reject(error);
-    }
+    // if (!!!error.response) {
+    //     dispatch({type: 'CONNECTION_NETWORK_ERROR', payload: error});
+    //     return Promise.reject(error);
+    // }
 
     if (error.response.status === 401) {
         return dispatch(refresh_token())
@@ -94,109 +100,94 @@ export const connectionResponseErrorHandles = (error) => (dispatch, getState) =>
             .catch(() => Promise.reject(error))
     }
 
-    // if (error.response.status === 401) {
-    //     const data = {grant_type: 'refresh_token', refresh_token: getState().authenticationStore.token.refresh_token};
-    //     return dispatch(token(data))
-    //         .then(() => error.config)
-    //         .catch(() => Promise.reject(error))
-    // }
-
     // if (error.response.status === 400 && error.config.url.includes('token')) {
     //     dispatch({type: 'AUTHENTICATION_LOGOUT', payload: error});
     //     return Promise.reject(error);
     // }
 
-    dispatch({type: 'CONNECTION_RESPONSE_ERROR', payload: error});
+    // dispatch({type: 'CONNECTION_RESPONSE_ERROR', payload: error});
     return Promise.reject(error);
 }
 
 const refresh_token=()=> (dispatch, getState) => {
     var auth = authorization_get();
-    if (!!!auth.refresh_token) return Promise.reject();
+    if (!!!auth || !!!auth.refresh_token) return Promise.reject();
 
-    let url = 'token';
-    let data = queryString.stringify({grant_type: 'refresh_token', refresh_token: auth.refresh_token});
-    let config = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+    let url = urlBase + 'token';
+    let data = {grant_type: 'refresh_token', refresh_token: auth.refresh_token};
+    let config = {headers: {'Content-Type': contentTypeHeader.urlencoded}};
+    let reducer = 'REFRESH_TOKEN';
 
-    let reducer = 'ACCOUNT_LOGIN';
-    dispatch({type: reducer + '_REQUEST', payload: 'refresh_token'});
-    return post(url,data,config)
-        .then(x => {
-            console.log("x",x);
-            dispatch({type: reducer + '_SUCCESS', payload: x.data});
-            return x;
-        })
-        .catch(x => {
-            console.log("x error ",x);
-            dispatch({type: reducer + '_FAILURE'});
-            return Promise.reject(x);
-        })
+    dispatch({type: reducer + '_REQUEST'});
+    return axios.post(url,data,config)
+        .then(x => {dispatch({type: reducer + '_SUCCESS', payload: x.data});return x;})
+        .catch(x => {dispatch({type: reducer + '_FAILURE'});return Promise.reject(x);})
 }
 
-export const token=(data)=>(dispatch, getState) => {
-    var grantType = '';
-    (data.grant_type === 'refresh_token')?'_REFRESH':'_GET';
-    dispatch({type: 'AUTHENTICATION_TOKEN'+grantType, payload: data.grant_type});
-    return axios.post(urlBase + 'token', queryString.stringify(data))
-        .then(response => {
-            dispatch({type: 'AUTHENTICATION_TOKEN'+grantType+'_SUCCESS', payload: response.data});
-            return response.data;
-        })
-        .catch(error => {
-            dispatch({type: 'AUTHENTICATION_TOKEN'+grantType+'_FAILURE', payload: error});
-            return Promise.reject(error);
-        })
-}
 
-export const get=(url, key) => (dispatch, getState) => {
-    key = !!key ? '/' + key : '';
-    url = urlBase + url + key;
-    return axios.get(url)
-        .then(response => Promise.resolve(response.data))
-        .catch(error => Promise.reject(error))
-}
-
-// export const post=(url,data,config) => (dispatch, getState) => {
-//     url = urlBase + url;
-//     return axios.post(url, data, config)
-//         .then(response => Promise.resolve(response.data))
-//         .catch(error => Promise.reject(error))
-// }
-
-export const post=(url,data,config)=> {
-    url = urlBase + url;
-    return axios.post(url, data, config);
-}
-
-export const put=(url,key,data,config) => (dispatch, getState) => {
-    key = !!key ? '/' + key : '';
-    url = urlBase + url + key;
-    return axios.put(url, data, config)
-        .then(response => Promise.resolve(response.data))
-        .catch(error => Promise.reject(error))
-}
-
+// LocalStorage
 export const storageGet=(key) => {
     var data = localStorage.getItem(key);
-    if (!!!data) return null;
+    if (data===undefined) data = null;
     return JSON.parse(data);
 }
 
 export const storageSet=(key, data)=>{
-    if (!!data) data = JSON.stringify(data); else data = null;
+    if (data===undefined) data = null;
+    data = JSON.stringify(data);
     localStorage.setItem(key, data);
 }
 
 
+// REST
+const inTransaction = async (fun, url, data, config) =>{
+    var maxRetries = 3;
 
+    var error;
+    let newId = storageGet(storageTransactionId);
+    if(!!newId) newId = parseInt(newId)+1; else newId=1;
+    storageSet(storageTransactionId,newId);
 
+    for(let i = 0; i < maxRetries; i++) {
+        try {
+            if (storageGet(storageAuthenticating) === true) throw isAuthenticatingError;
+            return await fun(url, {...data, transactionId: newId}, config);
+        }catch(e) {
 
+            // {Message: "An error has occurred.", ExceptionMessage: "Hola", ExceptionType: "System.ApplicationException", StackTrace: "... bla bla ..."}
+            if (!!e.response) error = {type: e.response.data.ExceptionType, message: e.response.data.ExceptionMessage};
+            if (!!!e.response) error = {type: connectionError};
+            if (e === isAuthenticatingError) error = {type: isAuthenticatingError};
 
+            console.warn("Attempt:", i + 1, " Error:", error.type, error.message);
 
-export const account_login=(data)=>{
-    return axios.post(urlBase + 'token', queryString.stringify(data))
+            if (error.type === isAuthenticatingError) {
+                maxRetries = 5;
+                await new Promise(resolve => setTimeout(resolve, 250));
+            }
+
+            if (error.type === connectionError) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+        }
+    }
+    return Promise.reject(error);
+};
+
+export const get=(url, key, config) => {
+    key = !!key ? '/' + key : '';
+    url = urlBase + url + key;
+    return inTransaction(axios.get, url, null, config);
 }
 
-export const account_password=(data)=>{
-    return axios.post(urlBase + 'account' + '/' + 'password', data)
+export const post=(url,data,config)=> {
+    url = urlBase + url;
+    return inTransaction(axios.post, url, data, config);
+}
+
+export const put=(url,key,data,config)=> {
+    key = !!key ? '/' + key : '';
+    url = urlBase + url + key;
+    return inTransaction(axios.put, url, data, config);
 }

@@ -10,3 +10,9 @@ NuGet Install
 	Microsoft.Owin.Cors             -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0) Microsoft.AspNet.Cors (>= 5.0.0)
 	Microsoft.Owin.Security.OAuth   -> Owin (>= 1.0.0) Microsoft.Owin (>= 4.0.0) Microsoft.Owin.Security (>= 4.0.0) Newtonsoft.Json (>= 9.0.1) 
 
+
+NuGet Install - Habilitar Cors
+	Microsoft.AspNet.WebApi.Cors
+
+NuGet Install
+	EntityFramework

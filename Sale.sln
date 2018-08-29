@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sale.DataAccess", "Sale.DataAccess\Sale.DataAccess.csproj", "{4DD804CA-5050-473A-9795-432FC1DD0E6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sale.Api", "Sale.Api\Sale.Api.csproj", "{DEEF9DA5-6893-43D8-AFE0-DBEC61AB1303}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sale.Core", "Sale.Core\Sale.Core.csproj", "{209D2FEA-E61F-4154-911F-8CA0A226FD9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sale.Resources", "Sale.Resources\Sale.Resources.csproj", "{110B095C-2E74-458F-84E5-A8CB98211D96}"
@@ -23,10 +21,6 @@ Global
 		{4DD804CA-5050-473A-9795-432FC1DD0E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DD804CA-5050-473A-9795-432FC1DD0E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DD804CA-5050-473A-9795-432FC1DD0E6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DEEF9DA5-6893-43D8-AFE0-DBEC61AB1303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DEEF9DA5-6893-43D8-AFE0-DBEC61AB1303}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DEEF9DA5-6893-43D8-AFE0-DBEC61AB1303}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DEEF9DA5-6893-43D8-AFE0-DBEC61AB1303}.Release|Any CPU.Build.0 = Release|Any CPU
 		{209D2FEA-E61F-4154-911F-8CA0A226FD9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{209D2FEA-E61F-4154-911F-8CA0A226FD9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{209D2FEA-E61F-4154-911F-8CA0A226FD9D}.Release|Any CPU.ActiveCfg = Release|Any CPU

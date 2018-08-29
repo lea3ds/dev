@@ -26,11 +26,11 @@ export const autoLogin = (history) => (dispatch, getState) => {
 
 export const login = (data,history) => (dispatch, getState) => {
     console.log(history)
-    return dispatch(conn.token(data))
-        .then(json => {
-            goHome(history);
-        })
-        .catch(error => {
-            console.log("LOGIN ERROR ", error)
-        })
+    // return dispatch(conn.token(data))
+    //     .then(json => {
+    //         goHome(history);
+    //     })
+    //     .catch(error => {
+    //         console.log("LOGIN ERROR ", error)
+    //     })
 }

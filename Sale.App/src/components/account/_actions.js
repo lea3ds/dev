@@ -4,7 +4,8 @@ import * as queryString from 'querystring'
 export const login = (username,password) => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
         let url = 'token';
-        let data = queryString.stringify({grant_type: 'password', username: username, password: password});
+        //let data = queryString.stringify({grant_type: 'password', username: username, password: password});
+        let data = {grant_type: 'password', username: username, password: password};
         let config = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
         let reducer = 'ACCOUNT_LOGIN';
 

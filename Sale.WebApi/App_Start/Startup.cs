@@ -30,8 +30,8 @@ namespace Sale.WebApi.App_Start
 
         private void ConfigureOAuth(IAppBuilder appBuilder)
         {
-            var accessTokenLifetime = TimeSpan.FromMinutes(10);
-            var refreshTokenLifetime = TimeSpan.FromDays(10);
+            var accessTokenLifetime = TimeSpan.FromMinutes(1);
+            var refreshTokenLifetime = TimeSpan.FromDays(1);
 
             var serverOptions = new OAuthAuthorizationServerOptions
             {

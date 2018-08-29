@@ -38,7 +38,7 @@ namespace Sale.Core
                         db.SaveChanges();
                         throw new Exception("Invalid password");
                     }
-
+                        
                     pass.Attempts = 0;
                     pass.AttemptTimeStamp = now;
                     userId = pass.UserId;
