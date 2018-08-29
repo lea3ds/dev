@@ -1,11 +1,17 @@
 packages
 .vs
 
-Sale.Api/bin
-Sale.Api/obj
+Sale.Core/bin
+Sale.Core/obj
 
 Sale.DataAccess/bin
 Sale.DataAccess/obj
+
+Sale.Resources/bin
+Sale.Resources/obj
+
+Sale.WebApi/bin
+Sale.WebApi/obj
 
 Sale.App/.idea
 Sale.App/.vscode
