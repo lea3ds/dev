@@ -1,9 +1,8 @@
-import * as conn from "../../actions/connection";
-import * as queryString from 'querystring'
+import {post,getTokenPassword} from "../../actions/connection";
 
 export const login = (username,password) => (dispatch, getState) => {
     let data = {username: username, password: password};
-    return dispatch(conn.getTokenPassword(data));
+    return dispatch(getTokenPassword(data));
 }
 
 export const logout = () => (dispatch, getState) => {
@@ -20,7 +19,7 @@ export const password = (passwordOld,passwordNew) => (dispatch, getState) => {
         let reducer = 'ACCOUNT_PASSWORD';
 
         dispatch({type: reducer + '_REQUEST'});
-        return conn.post(url,data)
+        return post(url,data)
             .then(x => {
                 dispatch({type: reducer + '_SUCCESS'});
                 return resolve(x);
@@ -39,7 +38,7 @@ export const signin = (username,password) => (dispatch, getState) => {
         let reducer = 'ACCOUNT_SIGNIN';
 
         dispatch({type: reducer + '_REQUEST'});
-        return conn.post(url,data)
+        return post(url,data)
             .then(x => {
                 dispatch({type: reducer + '_SUCCESS', payload: x.data});
                 return resolve(x);

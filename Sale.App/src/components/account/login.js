@@ -12,7 +12,8 @@ class Component extends React.Component {
         this.props.login(this.state.username, this.state.password)
             .then(() => {
                 this.setState({confirming: false});
-                this.props.history.push(routes.rootApp.path);
+                //this.props.history.push(routes.rootApp.path);
+                this.props.history.push('/homePrivate');
             })
             .catch(() => {
                 window.showDialog({title: strings.account_login_failure_title, message: strings.account_login_failure_message});
