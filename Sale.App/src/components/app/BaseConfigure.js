@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { configure } from "../../actions/connection";
-import { autoLogin } from "../authentication/index";
 import { sync } from "../synchronizer/index";
 
 
@@ -27,6 +26,6 @@ class Component extends React.Component {
     }
 }
 
-const mapDispatchToProps = {autoLogin, sync, configure };
+const mapDispatchToProps = {sync, configure };
 const mapStateToProps = store => ({ authentication: store.authenticationStore });
 export default connect(mapStateToProps, mapDispatchToProps)(Component);

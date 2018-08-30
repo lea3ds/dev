@@ -64,6 +64,14 @@ class Component extends React.Component {
             </div>
 
         </div>;
+
+
+//             {/*<div style={{ marginTop: 5 }} >*/}
+//                 {/*<FacebookLogin client='FACEBOOK' loadClient={this.loadClient} login={this.login} initialized={this.clientInitialized} />*/}
+//             {/*</div>*/}
+//             {/*<div style={{ marginTop: 5 }} >*/}
+//                 {/*<GoogleLogin client='GOOGLE' loadClient={this.loadClient} login={this.login} initialized={this.clientInitialized} />*/}
+//             {/*</div>*/}
     }
 }
 

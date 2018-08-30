@@ -7,7 +7,6 @@ import {Dialog, Menu} from '../controllers';
 
 // ROUTES
 import { routes as routesAccount } from '../../components/account';
-import { routes as routesAuthentication } from '../../components/authentication';
 import { routes as routesHome } from '../pages/home';
 import { routes as routesPayment } from '../../components/pages/Payment';
 import { routes as routesPaymentCategory } from '../../components/pages/PaymentCategory';
@@ -16,8 +15,11 @@ import { routes as routesWaytopayType } from '../../components/pages/WaytopayTyp
 
 
 const menuLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Authentication', href: '/account' },
+    { name: 'Login', href: '/account/login' },
+    { name: 'Home', href: '/home' },
+    { name: 'HomePrivate', href: '/homePrivate' },
+
+
     { name: 'Payment', href: '/Payment' },
     { name: 'Payment Category', href: '/PaymentCategory' },
     { name: 'Waytopay', href: '/Waytopay' },
@@ -34,7 +36,6 @@ class Component extends React.Component {
         Object.values(routesPayment),
 
         Object.values(routesAccount),
-        Object.values(routesAuthentication),
         Object.values(routesHome),
 
     ).filter(x=>!!x.component);
