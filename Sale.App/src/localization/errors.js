@@ -1,6 +1,12 @@
 export const errors = {
-    default: "Ha ocurrido un error",
+    default: 'default',
 };
 
-export const getError = (err) => errors[err]!==undefined? errors[err]:errors.default;
+export const getError = (err) => {
+    if (errors[err] === undefined) {
+        console.log('UNDEFINED ERROR: ['+err+']')
+        return errors.default;
+    }
+    return errors[err];
+}
 

@@ -1,20 +1,22 @@
 import axios from "axios";
 import * as queryString from 'querystring'
-import moment from "moment/moment";
-import {routes, strings} from "../components/account";
 var urlBase = process.env.REACT_APP_SERVER_ADDR;
+const TOKEN_PATH = 'token';
 
+export const contentTypeHeader = {
+    json: 'application/json',
+    urlencoded: 'application/x-www-form-urlencoded',
+};
 
-export const storageAuthenticating = "connection.authenticating";
-const storageAuthorization = 'AUTHORIZATION';
-const storageTransactionId = "connection.transactionId";
-const connectionError = 'connectionError';
-const isAuthenticatingError = 'isAuthenticatingError';
-const contentTypeHeader = {json:'application/json', urlencoded:'application/x-www-form-urlencoded'};
+export const storageKeys = {
+    authorization:'AUTHORIZATION',
+    authenticating : 'connection.authenticating',
+    transactionId :'connection.transactionId',
+}
 
 
 export const authorization_valid=(data)=> {
-    var data = storageGet(storageAuthorization);
+    var data = storageGet(storageKeys.authorization);
     try {
         if (!!data
             && !!data.token_type
@@ -29,7 +31,7 @@ export const authorization_valid=(data)=> {
 }
 
 export const authorization_get=()=> {
-    return storageGet(storageAuthorization);
+    return storageGet(storageKeys.authorization);
 }
 
 export const authorization_set=(data)=> {
@@ -40,27 +42,26 @@ export const authorization_set=(data)=> {
         // var requestTime = now.unix();
         // var expireTime = now.add(data.expires_in, 's').unix();
         // storageSet(AUTHORIZATION_STORAGE,{...data,requestTime: requestTime,expireTime: expireTime});
-        storageSet(storageAuthorization,{...data});
+        storageSet(storageKeys.authorization,{...data});
     }else{
-        storageSet(storageAuthorization);
+        storageSet(storageKeys.authorization);
     }
 }
 
 const ping = () => {
     var url = authorization_valid()?'account/ping':'accountPublic/ping';
     get(url)
-        .then(e=>console.log("PING OK: ",url,"DATA: ",e))
-        .catch(e=>console.log("PING URL: ",url,"ERROR: ",e));
+        //.then(e=>console.log("PING OK: ",url,"DATA: ",e))
+        .catch(e=>console.log("PING ERROR: ",url," -> ",e));
 }
 
-
+//++ CONFIGURE
 export const configure = () =>  (dispatch, getState) => {
 
     setInterval(() => ping(), 10000);
 
     axios.interceptors.request.use(
         (request) => {
-
             if (authorization_valid()) {
                 var auth = authorization_get();
                 request.headers['Authorization'] = auth.token_type + ' ' + auth.access_token;
@@ -75,57 +76,138 @@ export const configure = () =>  (dispatch, getState) => {
             return request;
         },
         (error) => {
-            dispatch({type: 'CONNECTION_REQUEST_ERROR', payload: error});
+            console.log('axios.interceptors.request [error]',error);
             return Promise.reject(error);
         });
 
     axios.interceptors.response.use(
-        (response) => response,
+        (response) => {
+            return response;
+        },
         (error) => {
             return dispatch(connectionResponseErrorHandles(error))
                 .then(originalRequestEdited => axios(originalRequestEdited))
-                .catch(err => Promise.reject(err))
+                .catch(err =>  Promise.reject(err))
         });
 }
 
 export const connectionResponseErrorHandles = (error) => (dispatch, getState) => {
-    // if (!!!error.response) {
-    //     dispatch({type: 'CONNECTION_NETWORK_ERROR', payload: error});
-    //     return Promise.reject(error);
-    // }
 
-    if (error.response.status === 401) {
-        return dispatch(refresh_token())
+    if (error.response.status === 401) { // refresh_token
+        return dispatch(getTokenRefresh())
             .then(() => error.config)
             .catch(() => Promise.reject(error))
     }
 
-    // if (error.response.status === 400 && error.config.url.includes('token')) {
-    //     dispatch({type: 'AUTHENTICATION_LOGOUT', payload: error});
-    //     return Promise.reject(error);
-    // }
+    if (error.response.status === 400 && error.config.url.includes(TOKEN_PATH)) { // refresh_token
+        return dispatch(killToken())
+            .then(()=>Promise.reject(error))
+    }
 
-    // dispatch({type: 'CONNECTION_RESPONSE_ERROR', payload: error});
     return Promise.reject(error);
 }
 
-const refresh_token=()=> (dispatch, getState) => {
+const errorProcess=(e) => {
+    if (!!!e) return null;
+    if (!!e.response && !!e.response.status) return {type:'statusCode' + e.response.status}
+    if (!!!e.response) return {type:'connectionLost'};
+    if (!!e.type) return {type:e.type};
+    return null;
+}
+
+const inTransaction = async (fun, url, data, config) => {
+    var maxRetries = 3;
+    var errorResponse;
+    let newId = storageGet(storageKeys.transactionId);
+    if (!!newId) newId = parseInt(newId) + 1; else newId = 1;
+    storageSet(storageKeys.transactionId, newId);
+
+    for (let i = 1; i <= maxRetries; i++) {
+        try {
+            if (storageGet(storageKeys.authenticating) === true) throw {type: 'authenticating'};
+            return await fun(url, {...data, transactionId: newId}, config)
+                .then((e) => {
+                    let error = errorProcess(e.data.error)
+                    if (!!error) throw error;
+                    return e;
+                });
+        } catch (e) {
+            errorResponse = errorProcess(e);
+            console.warn("Attempt:", i, " Error:", errorResponse);
+            if (errorResponse.type === 'authenticating')
+                await new Promise(resolve => setTimeout(resolve, 500));
+            if (errorResponse.type === 'connectionLost')
+                maxRetries=0;
+        }
+    }
+
+    return Promise.reject(errorResponse);
+};
+//-- CONFIGURE
+
+//++ TOKEN
+export const killToken=()=>(dispatch, getState) => {
+    authorization_set();
+    storageSet(storageKeys.authenticating, false);
+    dispatch({type: 'TOKEN_KILL'});
+}
+
+export const getTokenPassword=(data)=> (dispatch, getState) => {
+    let url = urlBase + TOKEN_PATH;
+    data = {...data, grant_type: 'password'};
+    let config = {headers: {'Content-Type': contentTypeHeader.urlencoded}};
+    let reducer = 'TOKEN_PASSWORD_GET';
+
+    authorization_set();
+    storageSet(storageKeys.authenticating, true);
+    dispatch({type: reducer + '_REQUEST'});
+    return axios.post(url, data, config)
+        .then(x => {
+                authorization_set(x.data);
+                storageSet(storageKeys.authenticating, false);
+                dispatch({type: reducer + '_SUCCESS', payload: x.data});
+                return x;
+            }
+        )
+        .catch(x => {
+            authorization_set();
+            storageSet(storageKeys.authenticating, false);
+            dispatch({type: reducer + '_FAILURE'});
+            return Promise.reject(x);
+        })
+}
+
+export const getTokenRefresh=()=> (dispatch, getState) => {
     var auth = authorization_get();
     if (!!!auth || !!!auth.refresh_token) return Promise.reject();
 
-    let url = urlBase + 'token';
+    let url = urlBase + TOKEN_PATH;
     let data = {grant_type: 'refresh_token', refresh_token: auth.refresh_token};
     let config = {headers: {'Content-Type': contentTypeHeader.urlencoded}};
-    let reducer = 'REFRESH_TOKEN';
 
+    authorization_set();
+    storageSet(storageKeys.authenticating, true);
+    let reducer = 'TOKEN_REFRESH_GET';
     dispatch({type: reducer + '_REQUEST'});
     return axios.post(url,data,config)
-        .then(x => {dispatch({type: reducer + '_SUCCESS', payload: x.data});return x;})
-        .catch(x => {dispatch({type: reducer + '_FAILURE'});return Promise.reject(x);})
+        .then(x => {
+                authorization_set(x.data);
+                storageSet(storageKeys.authenticating, false);
+                dispatch({type: reducer + '_SUCCESS', payload: x.data});
+                return x;
+            }
+        )
+        .catch(x => {
+            authorization_set();
+            storageSet(storageKeys.authenticating, false);
+            dispatch({type: reducer + '_FAILURE'});
+            return Promise.reject(x);
+        })
 }
+//-- TOKEN
 
 
-// LocalStorage
+//++ LocalStorage
 export const storageGet=(key) => {
     var data = localStorage.getItem(key);
     if (data===undefined) data = null;
@@ -137,44 +219,10 @@ export const storageSet=(key, data)=>{
     data = JSON.stringify(data);
     localStorage.setItem(key, data);
 }
+//-- LocalStorage
 
 
-// REST
-const inTransaction = async (fun, url, data, config) =>{
-    var maxRetries = 3;
-
-    var error;
-    let newId = storageGet(storageTransactionId);
-    if(!!newId) newId = parseInt(newId)+1; else newId=1;
-    storageSet(storageTransactionId,newId);
-
-    for(let i = 0; i < maxRetries; i++) {
-        try {
-            if (storageGet(storageAuthenticating) === true) throw isAuthenticatingError;
-            return await fun(url, {...data, transactionId: newId}, config);
-        }catch(e) {
-
-            // {Message: "An error has occurred.", ExceptionMessage: "Hola", ExceptionType: "System.ApplicationException", StackTrace: "... bla bla ..."}
-            if (!!e.response) error = {type: e.response.data.ExceptionType, message: e.response.data.ExceptionMessage};
-            if (!!!e.response) error = {type: connectionError};
-            if (e === isAuthenticatingError) error = {type: isAuthenticatingError};
-
-            console.warn("Attempt:", i + 1, " Error:", error.type, error.message);
-
-            if (error.type === isAuthenticatingError) {
-                maxRetries = 5;
-                await new Promise(resolve => setTimeout(resolve, 250));
-            }
-
-            if (error.type === connectionError) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
-
-        }
-    }
-    return Promise.reject(error);
-};
-
+//++ REST
 export const get=(url, key, config) => {
     key = !!key ? '/' + key : '';
     url = urlBase + url + key;
@@ -191,3 +239,4 @@ export const put=(url,key,data,config)=> {
     url = urlBase + url + key;
     return inTransaction(axios.put, url, data, config);
 }
+//-- REST

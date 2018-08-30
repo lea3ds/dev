@@ -2,30 +2,13 @@ import * as conn from "../../actions/connection";
 import * as queryString from 'querystring'
 
 export const login = (username,password) => (dispatch, getState) => {
-    return new Promise((resolve, reject) => {
-        let url = 'token';
-        //let data = queryString.stringify({grant_type: 'password', username: username, password: password});
-        let data = {grant_type: 'password', username: username, password: password};
-        let config = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
-        let reducer = 'ACCOUNT_LOGIN';
-
-        dispatch({type: reducer + '_REQUEST', payload: data.grant_type});
-        return conn.post(url,data,config)
-            .then(x => {
-                dispatch({type: reducer + '_SUCCESS', payload: x.data});
-                return resolve(x);
-            })
-            .catch(x => {
-                dispatch({type: reducer + '_FAILURE'});
-                return reject(x);
-            })
-    })
+    let data = {username: username, password: password};
+    return dispatch(conn.getTokenPassword(data));
 }
 
 export const logout = () => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
-        let reducer = 'ACCOUNT_LOGOUT';
-        dispatch({type: reducer + '_REQUEST'});
+        dispatch({type: 'TOKEN_KILL'});
         setTimeout(resolve, 2000);
     })
 }

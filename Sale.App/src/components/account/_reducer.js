@@ -1,4 +1,4 @@
-import {authorization_set, authorization_valid, storageSet,storageAuthenticating} from '../../actions/connection';
+import {authorization_valid} from '../../actions/connection';
 
 const initialState = {
     isAuthenticated: authorization_valid(),
@@ -7,37 +7,30 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case 'AUTHENTICATION_LOGOUT' :
-            authorization_set();
-            return {...state, isAuthenticated: authorization_valid()};
+        //++ TOKEN
 
+        case 'TOKEN_KILL' :
+            return {...state, isAuthenticated: false};
 
-        case 'ACCOUNT_LOGIN_REQUEST' :
-            authorization_set();
-            return {...state, isAuthenticated: authorization_valid()};
+        case 'TOKEN_PASSWORD_GET_REQUEST' :
+            return {...state};
 
-        case 'ACCOUNT_LOGIN_SUCCESS' :
-            authorization_set({...action.payload});
-            return {...state, isAuthenticated: authorization_valid()};
+        case 'TOKEN_PASSWORD_GET_SUCCESS' :
+            return {...state, isAuthenticated: true};
 
-        case 'ACCOUNT_LOGIN_FAILURE' :
-            authorization_set();
-            return {...state, isAuthenticated: authorization_valid()};
+        case 'TOKEN_PASSWORD_GET_FAILURE' :
+            return {...state, isAuthenticated: false};
 
+        case 'TOKEN_REFRESH_GET_REQUEST' :
+            return {...state};
 
-        case 'REFRESH_TOKEN_REQUEST' :
-            authorization_set();
-            storageSet(storageAuthenticating, true);
-            return {...state, isAuthenticated: authorization_valid()};
+        case 'TOKEN_REFRESH_GET_SUCCESS' :
+            return {...state, isAuthenticated: true};
 
-        case 'REFRESH_TOKEN_SUCCESS' :
-            authorization_set({...action.payload});
-            storageSet(storageAuthenticating, false);
-            return {...state, isAuthenticated: authorization_valid()};
+        case 'TOKEN_REFRESH_GET_FAILURE' :
+            return {...state, isAuthenticated: false};
 
-        case 'REFRESH_TOKEN_FAILURE' :
-            storageSet(storageAuthenticating, false);
-            return {...state, isAuthenticated: authorization_valid()};
+        //-- TOKEN
 
         default:
             return state;
