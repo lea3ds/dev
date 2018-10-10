@@ -21,7 +21,7 @@ class Component extends React.Component {
     }
 
     render() {
-
+console.log("ACA")
         return <div>
 
             <Toolbar

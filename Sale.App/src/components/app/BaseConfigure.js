@@ -16,7 +16,7 @@ class Component extends React.Component {
 
     startSynchronizer() {
         setInterval(() => {
-            if (this.props.authentication.isAuthenticated === true && this.state.isReady === true) this.props.sync()
+            //if (this.props.authentication.isAuthenticated === true && this.state.isReady === true) this.props.sync()
         }, 1000);
     }
 

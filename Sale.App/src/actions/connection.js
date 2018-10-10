@@ -15,7 +15,7 @@ export const storageKeys = {
 }
 
 
-export const authorization_valid=(data)=> {
+export const authorization_valid=()=> {
     var data = storageGet(storageKeys.authorization);
     try {
         if (!!data
@@ -52,12 +52,13 @@ const ping = () => {
     var url = authorization_valid()?'account/ping':'accountPublic/ping';
     get(url)
         //.then(e=>console.log("PING OK: ",url,"DATA: ",e))
-        .catch(e=>console.log("PING ERROR: ",url," -> ",e));
+        //.catch(e=>console.log("PING ERROR: ",url," -> ",e));
+        .catch(e=>null);
 }
 
 //++ CONFIGURE
 export const configure = () =>  (dispatch, getState) => {
-
+    ping();
     setInterval(() => ping(), 10000);
 
     axios.interceptors.request.use(
